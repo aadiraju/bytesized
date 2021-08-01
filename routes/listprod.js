@@ -2,6 +2,18 @@ const express = require('express');
 const router = express.Router();
 const sql = require('mssql');
 
+//handlebar helper functions
+
+const priceFormat = (price) => {
+    return 'CAD$' + Number(price).toFixed(2);
+};
+
+const makeAddCartURL = (product) => {
+    let prodName = encodeURIComponent(product.productName); //makes the name URL safe
+    return `addcart?id=${product.productId}&name=${prodName}&price=${product.productPrice}`
+};
+
+//request and rendering
 router.get('/', function (req, res, next) {
     res.setHeader('Content-Type', 'text/html');
     // Get the product name to search for
@@ -9,43 +21,52 @@ router.get('/', function (req, res, next) {
     if (name === undefined)
         name = '';
 
-    /** $name now contains the search string the user entered
-     Use it to build a query and print out the results. **/
-    /** Create and validate connection **/
-    /**
-     For each product create a link of the form
-     addcart?id=<productId>&name=<productName>&price=<productPrice>
-     **/
-    /**
-     Useful code for formatting currency:
-     let num = 2.89999;
-     num = num.toFixed(2);
-     **/
-    let pool;
+    let category = req.query.categoryName;
+    if (category === undefined || category === ' ')
+        category = 'All';
+
     (async function () {
         let pool = await sql.connect(dbConfig);
 
         let prodQuery = `SELECT productId, productName, productPrice, productImageURL, categoryName
                          from product p
                                   join category c on p.categoryId = c.categoryId
-                         WHERE productName LIKE CONCAT('%', @name, '%')`;
+                         WHERE productName LIKE CONCAT('%', @name, '%')
+                           AND (categoryName = @category OR @category = 'All')
+                         ORDER BY productId ASC`;
 
+        let catQuery = `SELECT categoryName
+                        from category
+                        ORDER BY categoryName ASC`;
         // make prepped SQL statement for safety and injection prevention, then add the user parameters into it
-        const preppedSql = new sql.PreparedStatement(pool);
+        let preppedSql = new sql.PreparedStatement(pool);
         preppedSql.input('name', sql.VarChar(40));
+        preppedSql.input('category', sql.VarChar(50));
         await preppedSql.prepare(prodQuery);
 
-        let results = await preppedSql.execute({name: name});
+        let results = await preppedSql.execute({name: name, category: category});
         let prodList = [];
 
         for (let prod of results.recordset)
             prodList.push(prod);
 
-        return prodList;
-    })().then((prodList) => {
+        preppedSql = new sql.PreparedStatement(pool);
+        await preppedSql.prepare(catQuery);
+        let catResults = await preppedSql.execute({});
+        let catList = ['All'];
+        for (let cat of catResults.recordset)
+            catList.push(cat.categoryName);
+
+        return [prodList, catList];
+    })().then(([prodList, catList]) => {
         res.render('listprod', {
             title: 'Bytesized Product List',
-            prodList: prodList
+            prodList: prodList,
+            catList: catList,
+            helpers: {
+                priceFormat,
+                makeAddCartURL
+            }
         });
     })
         .catch(err => {
