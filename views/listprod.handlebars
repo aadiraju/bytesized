@@ -1,0 +1,26 @@
+<div class="flex items-center justify-center">
+    <div class="col-span-12">
+        <table class="shadow-lg bg-gray">
+            <thead>
+            <tr>
+                <th class="bg-gray-300 border text-left px-8 py-4">Product Image</th>
+                <th class="bg-gray-300 border text-left px-8 py-4">Product Name</th>
+                <th class="bg-gray-300 border text-left px-8 py-4">Category</th>
+                <th class="bg-gray-300 border text-left px-8 py-4">Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each prodList}}
+                <tr>
+                    <td class="border text-center px-20 py-4">
+                        <img src={{this.productImageURL}} alt={{this.productName}}>
+                    </td>
+                    <td class="border text-left px-8 py-4">{{this.productName}}</td>
+                    <td class="border text-left px-8 py-4">{{this.categoryName}}</td>
+                    <td class="border text-left px-8 py-4">{{this.productPrice}}</td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
