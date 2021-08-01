@@ -21,6 +21,7 @@ router.get('/', function (req, res, next) {
      let num = 2.89999;
      num = num.toFixed(2);
      **/
+    let pool;
     (async function () {
         let pool = await sql.connect(dbConfig);
 
