@@ -5,7 +5,7 @@ const sql = require('mssql');
 //handlebar helper functions
 
 const priceFormat = (price) => {
-    return 'CAD$' + Number(price).toFixed(2);
+    return 'CAD$ ' + Number(price).toFixed(2);
 };
 
 const makeAddCartURL = (product) => {
