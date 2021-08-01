@@ -2,32 +2,77 @@ const express = require('express');
 const router = express.Router();
 const sql = require('mssql');
 
-router.get('/', function(req, res, next) {
-    res.setHeader('Content-Type', 'text/html');
-    res.write("<title>Bytesized Product List</title>")
+//handlebar helper functions
 
+const priceFormat = (price) => {
+    return 'CAD$ ' + Number(price).toFixed(2);
+};
+
+const makeAddCartURL = (product) => {
+    let prodName = encodeURIComponent(product.productName); //makes the name URL safe
+    return `addcart?id=${product.productId}&name=${prodName}&price=${product.productPrice}`
+};
+
+//request and rendering
+router.get('/', function (req, res, next) {
+    res.setHeader('Content-Type', 'text/html');
     // Get the product name to search for
     let name = req.query.productName;
-    
-    /** $name now contains the search string the user entered
-     Use it to build a query and print out the results. **/
+    if (name === undefined)
+        name = '';
 
-    /** Create and validate connection **/
+    let category = req.query.categoryName;
+    if (category === undefined || category === ' ')
+        category = 'All';
 
-    /** Print out the ResultSet **/
+    (async function () {
+        let pool = await sql.connect(dbConfig);
 
-    /** 
-    For each product create a link of the form
-    addcart?id=<productId>&name=<productName>&price=<productPrice>
-    **/
+        let prodQuery = `SELECT productId, productName, productPrice, productImageURL, categoryName
+                         from product p
+                                  join category c on p.categoryId = c.categoryId
+                         WHERE productName LIKE CONCAT('%', @name, '%')
+                           AND (categoryName = @category OR @category = 'All')
+                         ORDER BY productId ASC`;
 
-    /**
-        Useful code for formatting currency:
-        let num = 2.89999;
-        num = num.toFixed(2);
-    **/
+        let catQuery = `SELECT categoryName
+                        from category
+                        ORDER BY categoryName ASC`;
+        // make prepped SQL statement for safety and injection prevention, then add the user parameters into it
+        let preppedSql = new sql.PreparedStatement(pool);
+        preppedSql.input('name', sql.VarChar(40));
+        preppedSql.input('category', sql.VarChar(50));
+        await preppedSql.prepare(prodQuery);
 
-    res.end();
+        let results = await preppedSql.execute({name: name, category: category});
+        let prodList = [];
+
+        for (let prod of results.recordset)
+            prodList.push(prod);
+
+        preppedSql = new sql.PreparedStatement(pool);
+        await preppedSql.prepare(catQuery);
+        let catResults = await preppedSql.execute({});
+        let catList = ['All'];
+        for (let cat of catResults.recordset)
+            catList.push(cat.categoryName);
+
+        return [prodList, catList];
+    })().then(([prodList, catList]) => {
+        res.render('listprod', {
+            title: 'Bytesized Product List',
+            prodList: prodList,
+            catList: catList,
+            helpers: {
+                priceFormat,
+                makeAddCartURL
+            }
+        });
+    })
+        .catch(err => {
+            console.dir(err);
+            res.send(err);
+        });
 });
 
 module.exports = router;

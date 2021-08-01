@@ -1,0 +1,73 @@
+<div class="text-7xl font-black text-center">Product List;</div>
+<div class="flex items-center justify-center px-4 py-3">
+    <div class="w-1/2 mx-auto shadow-lg rounded-md p-4 bg-white">
+        <p class="text-2xl font-extrabold py-2">Search Products</p>
+        <form method="get" action="listprod">
+            <div class="flex gap-2 flex-row-center content-evenly">
+                <div class="relative flex-1">
+                    <label for="productName"
+                           class=" left-2 px-1 -top-2.5 bg-white text-black text-sm transition-all">
+                        Product Name :
+                    </label>
+                    <input id="productName" name="productName" type="text"
+                           class=" h-12 border border-1.5 rounded-md border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-black focus:border-2 transition ease-in duration-100 p-3"
+                           placeholder="Microchips, etc">
+                </div>
+                <div class="relative flex-1">
+                    <label for="categoryName"
+                           class=" left-2 px-1 -top-2.5 bg-white text-black text-sm transition-all">
+                        Category Name :
+                    </label>
+                    <select id="categoryName" size="1" name="categoryName"
+                            class=" h-12 border border-1.5 rounded-md border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-black focus:border-2 transition ease-in duration-100 p-3">
+                        {{#each catList}}
+                            <option>{{this}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="relative flex-1 pt-7">
+                    <button type="submit" class="bg-black text-white font-extrabold text-md px-4 py-2">Search</button>
+                    <button type="reset" class="outline-black text-black font-extrabold text-md px-3 py-1">Clear
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="flex items-center justify-center">
+    <div class="col-span-12">
+        <table class="shadow-lg bg-white">
+            <thead>
+            <tr>
+                <th class="bg-black border text-left text-white px-8 py-4"></th>
+                <th class="bg-black border text-left text-white px-8 py-4">Product Image</th>
+                <th class="bg-black border text-left text-white px-8 py-4">Product Name</th>
+                <th class="bg-black border text-left text-white px-8 py-4">Category</th>
+                <th class="bg-black border text-left text-white px-8 py-4">Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each prodList}}
+                <tr>
+                    <td class="px-5 hover:bg-gray-300 active:shadow-lg mouse shadow transition ease-in duration-200">
+                        <a href={{makeAddCartURL this}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 p-0" viewBox="0 0 20 20"
+                                 fill="currentColor">
+                                <path fill-rule="evenodd"
+                                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                        </a>
+                    </td>
+                    <td class="border text-center px-20 py-4">
+                        <img src={{this.productImageURL}} alt={{this.productName}}>
+                    </td>
+                    <td class="border text-left px-8 py-4">{{this.productName}}</td>
+                    <td class="border text-left px-8 py-4">{{this.categoryName}}</td>
+                    <td class="border text-left px-8 py-4">{{priceFormat this.productPrice}}</td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
