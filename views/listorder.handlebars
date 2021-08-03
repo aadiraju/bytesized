@@ -1,0 +1,28 @@
+<div class="text-7xl font-black text-center">Order List;</div>
+<div class="flex items-center justify-center">
+    <table class="shadow-lg bg-white">
+        <thead>
+            <tr>
+                <th class="bg-black border text-center text-white px-8 py-4">Order Id</th>
+                <th class="bg-black border text-center text-white px-8 py-4">Order Date</th>
+                <th class="bg-black border text-center text-white px-8 py-4">Customer Id</th>
+                <th class="bg-black border text-center text-white px-8 py-4">Customer Name</th>
+                <th class="bg-black border text-center text-white px-8 py-4">Total Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each ordList}}
+                <tr>
+                    <td class="border text-center px-8 py-4">{{this.orderId}}</td>
+                    <td class="border text-left px-8 py-4">{{this.ordDate}}</td>
+                    <td class="border text-center px-8 py-4">{{this.customerId}}</td>
+                    <td class="border text-left px-8 py-4">{{this.customerName}}</td>
+                    <td class="border text-left px-8 py-4">{{this.totalAmount}}</td>
+                </tr>
+                <tr>
+                    
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
