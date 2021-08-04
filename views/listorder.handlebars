@@ -14,14 +14,14 @@
             {{#each ordList}}
                 <tr>
                     <td class="border text-center px-8 py-4">{{this.orderId}}</td>
-                    <td class="border text-left px-8 py-4">{{this.ordDate}}</td>
+                    <td class="border text-left px-8 py-4">{{ dateTimeFormat this.ordDate}}</td>
                     <td class="border text-center px-8 py-4">{{this.customerId}}</td>
                     <td class="border text-left px-8 py-4">{{this.customerName}}</td>
                     <td class="border text-left px-8 py-4">{{priceFormat this.totalAmount}}</td>
                 </tr>
                 <tr>
                     <td colspan="5">
-                        <table>
+                        <table class = "border">
                             <tr>
                                 <th class="px-8 py-4">Product Id</th>
                                 <th class="px-8 py-4">Quantity</th>

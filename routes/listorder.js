@@ -2,71 +2,76 @@ const express = require('express');
 const router = express.Router();
 const sql = require('mssql');
 
+// handlebars helper functions
 const priceFormat = (price) => {
     return '$' + Number(price).toFixed(2);
+};
+
+const dateTimeFormat = (datetime) => {
+    date = datetime.toISOString().split('T')[0];
+    time = datetime.toISOString().substr(11,18);
+    return date + " " + time;
+   
 };
 
 router.get('/', function(req, res, next) {
     res.setHeader('Content-Type', 'text/html');
     //res.write('<title>YOUR NAME Grocery Order List</title>');
-    /** Create connection, and validate that it connected successfully **/
+     
     (async function(){
+        //connects to the database
         let pool = await sql.connect(dbConfig);
 
-        let sqlQuery = `SELECT orderId, CONVERT(varchar, orderDate, 121) as ordDate, customer.customerId, CONCAT(firstName,' ', LastName) as customerName, totalAmount
+        // Query to get order summary information
+        let sqlQuery = `SELECT orderId, orderDate as ordDate, customer.customerId, CONCAT(firstName,' ', LastName) as customerName, totalAmount
                         FROM ordersummary ordSum join customer on ordSum.customerId = customer.customerId`;
 
         let results = await pool.request().query(sqlQuery);
         
+        //array to hold the order list information
         let ordList = [];
-        
+
+            // gets the product information for each order
             for (let i = 0; i < results.recordset.length; i++) {
                 let result = results.recordset[i];
                 let ordId = result.orderId;
                 let prodInOrd = [];
 
-                let sqlQuery2 = `SELECT productId, quantity, price FROM orderproduct WHERE orderId = ` + ordId;
-                let results2 = await pool.request().query(sqlQuery2);
+                // Query to get product information on each order
+                let sqlQuery2 = `SELECT productId, quantity, price FROM orderproduct WHERE orderId = @ordId`;
+
+                // Executes sqlQuery2 and protects input from injection
+                let preparedStatement = new sql.PreparedStatement(pool);
+                preparedStatement.input('ordId', sql.Int);
+                await preparedStatement.prepare(sqlQuery2);
+                let results2 = await preparedStatement.execute({ordId: ordId});
+
 
                 for (let j = 0; j < results2.recordset.length; j++){
                     let result2 = results2.recordset[j];
                     prodInOrd.push(result2);
                 }
 
+                // adds the order summary info and product info to ordList (for handlebars template)
                 result.prodInOrd = prodInOrd;
                 ordList.push(result);
             }
         return [ordList];
-
-    })().then(([ordList]) => {
+    })()
+    //loads and renders the listorder page
+    .then(([ordList]) => {
         res.render('listorder', {
             title: 'Bytesized Order List',
             ordList: ordList,
             helpers: {
-                priceFormat
+                priceFormat,
+                dateTimeFormat
             }
         });
     }).catch(err =>{
         console.dir(err);
         res.send(err);
     });
-    /**
-    Useful code for formatting currency:
-        let num = 2.87879778;
-        num = num.toFixed(2);
-    **/
-
-    /** Write query to retrieve all order headers **/
-
-    /** For each order in the results
-            Print out the order header information
-            Write a query to retrieve the products in the order
-
-            For each product in the order
-                Write out product information 
-    **/
-//   res.end();
-   
 });
 
 module.exports = router;
