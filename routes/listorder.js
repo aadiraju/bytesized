@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const sql = require('mssql');
-const moment = require('moment');
 
 const priceFormat = (price) => {
     return '$' + Number(price).toFixed(2);
@@ -34,7 +33,8 @@ router.get('/', function(req, res, next) {
                     prodInOrd.push(result2);
                 }
 
-                ordList.push(result,prodInOrd)
+                result.prodInOrd = prodInOrd;
+                ordList.push(result);
             }
         return [ordList];
 
