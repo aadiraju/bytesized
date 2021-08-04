@@ -17,10 +17,27 @@
                     <td class="border text-left px-8 py-4">{{this.ordDate}}</td>
                     <td class="border text-center px-8 py-4">{{this.customerId}}</td>
                     <td class="border text-left px-8 py-4">{{this.customerName}}</td>
-                    <td class="border text-left px-8 py-4">{{this.totalAmount}}</td>
+                    <td class="border text-left px-8 py-4">{{priceFormat this.totalAmount}}</td>
                 </tr>
                 <tr>
-                    
+                    <td colspan="5">
+                        <table>
+                            <tr>
+                                <th class="px-8 py-4">Product Id</th>
+                                <th class="px-8 py-4">Quantity</th>
+                                <th class="px-8 py-4">Price</th>
+                            </tr>
+                            <tbody>
+                                {{#each this}}
+                                    <tr>
+                                        <td class="border text-center px-8 py-4">{{this.productId}}</td>
+                                        <td class="border text-center px-8 py-4">{{this.quantity}}</td>
+                                        <td class="border text-left px-8 py-4">{{priceFormat this.price}}</td>
+                                    </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </td>
                 </tr>
             {{/each}}
         </tbody>
