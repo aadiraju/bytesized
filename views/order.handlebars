@@ -1,45 +1,25 @@
-<div class="text-7xl font-black text-center mb-4">Order List;</div>
+<div class="text-7xl font-black text-center mb-4">Your Order Summary;</div>
 <div class="flex items-center justify-center">
     <table class="shadow-lg bg-white">
         <thead>
-            <tr>
-                <th class="bg-black border text-center text-white px-8 py-4">Order Id</th>
-                <th class="bg-black border text-center text-white px-8 py-4">Order Date</th>
-                <th class="bg-black border text-center text-white px-8 py-4">Customer Id</th>
-                <th class="bg-black border text-center text-white px-8 py-4">Customer Name</th>
-                <th class="bg-black border text-center text-white px-8 py-4">Total Amount</th>
-            </tr>
+        <tr>
+            <th class="bg-black border text-center text-white px-8 py-4">Product Id</th>
+            <th class="bg-black border text-center text-white px-8 py-4">Product Name</th>
+            <th class="bg-black border text-center text-white px-8 py-4">Quantity</th>
+            <th class="bg-black border text-center text-white px-8 py-4">Price</th>
+            <th class="bg-black border text-center text-white px-8 py-4">Subtotal</th>
+        </tr>
         </thead>
         <tbody>
-            {{#each ordList}}
+        {{#each realProductList}}
             <tr>
-                <td class="border text-center px-8 py-4">{{this.orderId}}</td>
-                <td class="border text-left px-8 py-4">{{ dateTimeFormat this.ordDate}}</td>
-                <td class="border text-center px-8 py-4">{{this.customerId}}</td>
-                <td class="border text-left px-8 py-4">{{this.customerName}}</td>
-                <td class="border text-left px-8 py-4">{{priceFormat this.totalAmount}}</td>
+                <td class="border text-center px-8 py-4">{{this.id}}</td>
+                <td class="border text-left px-8 py-4">{{this.name}}</td>
+                <td class="border text-center px-8 py-4">{{this.quantity}}</td>
+                <td class="border text-left px-8 py-4">{{this.price}}</td>
+                <td class="border text-left px-8 py-4">{{subtotalFormat this}}</td>
             </tr>
-            <tr>
-                <td colspan="5">
-                    <table class="border">
-                        <tr>
-                            <th class="px-8 py-4">Product Id</th>
-                            <th class="px-8 py-4">Quantity</th>
-                            <th class="px-8 py-4">Price</th>
-                        </tr>
-                        <tbody>
-                            {{#each this.prodInOrd}}
-                            <tr>
-                                <td class="border text-center px-8 py-4">{{this.productId}}</td>
-                                <td class="border text-center px-8 py-4">{{this.quantity}}</td>
-                                <td class="border text-left px-8 py-4">{{priceFormat this.price}}</td>
-                            </tr>
-                            {{/each}}
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-            {{/each}}
+        {{/each}}
         </tbody>
     </table>
 </div>

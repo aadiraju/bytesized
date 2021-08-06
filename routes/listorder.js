@@ -16,7 +16,6 @@ const dateTimeFormat = (datetime) => {
 
 router.get('/', function (req, res, next) {
     res.setHeader('Content-Type', 'text/html');
-    //res.write('<title>YOUR NAME Grocery Order List</title>');
 
     (async function () {
         //connects to the database

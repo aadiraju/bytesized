@@ -15,7 +15,7 @@ router.get('/', function (req, res, next) {
     let productList = false;
     if (req.session.productList) {
         productList = req.session.productList;
-        productList = productList.filter(Object=>Object)
+        productList = productList.filter(Object => Object)
 
         for (let item of productList) {
             if (item === null)
