@@ -1,6 +1,7 @@
 FROM node:14.10.1
 
-# WORKDIR /app
+# Create and change to the app directory.
+WORKDIR /usr/src/app
 
 COPY package*.json ./
 
