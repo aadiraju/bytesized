@@ -57,6 +57,7 @@ router.get('/', function (req, res, next) {
         for (let cat of catResults.recordset)
             catList.push(cat.categoryName);
 
+        pool.close();
         return [prodList, catList];
     })().then(([prodList, catList]) => {
         res.render('listprod', {

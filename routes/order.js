@@ -22,21 +22,21 @@ router.get('/', function (req, res, next) {
     }
 
     /**
-    Determine if valid customer id was entered
-    Determine if there are products in the shopping cart
-    If either are not true, display an error message
-    **/
+     Determine if valid customer id was entered
+     Determine if there are products in the shopping cart
+     If either are not true, display an error message
+     **/
     (async function () {
         let pool = await sql.connect(dbConfig);
 
         // Query for customer information.
         let customerIDQuery = `SELECT customerId, address, city, state, postalCode, country, userid
-                                FROM customer
-                                WHERE customerId = @customerId`;
+                               FROM customer
+                               WHERE customerId = @customerId`;
         let preppedSql = new sql.PreparedStatement(pool);
         preppedSql.input('customerId', sql.Int);
         await preppedSql.prepare(customerIDQuery);
-        let customerResults = await preppedSql.execute({ customerId: customerId });
+        let customerResults = await preppedSql.execute({customerId: customerId});
 
         // Check if ID is valid.
         for (let customer of customerResults.recordset) {
@@ -65,9 +65,11 @@ router.get('/', function (req, res, next) {
         // Insert order into ordersummary table.
         let date = new Date();
         let dateStr = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
-        let ordersummaryInsert = `INSERT INTO ordersummary (orderDate, totalAmount, shiptoAddress, shiptoCity, shiptoState, shiptoPostalCode, shiptoCountry, customerId)
-                                    OUTPUT INSERTED.orderId
-                                    VALUES (@orderDate, @totalAmount, @address, @city, @state, @postalCode, @country, @customerId);`;
+        let ordersummaryInsert = `INSERT INTO ordersummary (orderDate, totalAmount, shiptoAddress, shiptoCity,
+                                                            shiptoState, shiptoPostalCode, shiptoCountry, customerId)
+                                  OUTPUT INSERTED.orderId
+                                  VALUES (@orderDate, @totalAmount, @address, @city, @state, @postalCode, @country,
+                                          @customerId);`;
 
         preppedSql = new sql.PreparedStatement(pool);
         preppedSql.input('orderDate', sql.DateTime);
@@ -93,6 +95,7 @@ router.get('/', function (req, res, next) {
 
         let orderId = orderResults.recordset[0].orderId;
 
+        pool.close();
         return [cartSize, orderId, totalAmount, validIDstr];
     })().then(([cartSize, orderId, totalAmount, validIDstr]) => {
         res.render('order', {
