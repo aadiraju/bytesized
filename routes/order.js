@@ -13,7 +13,7 @@ const subtotalFormat = (product) => {
 router.get('/', function (req, res, next) {
     res.setHeader('Content-Type', 'text/html');
 
-    let customerId = Number(req.query.customerId);
+    let customerId = req.query ? Number(req.query.customerId) : null;
     let cartSize = 0;
     let isValid = false;
     let orderId = null;
@@ -41,7 +41,7 @@ router.get('/', function (req, res, next) {
         await preppedSql.prepare(customerIDQuery);
         let customerResults = await preppedSql.execute({customerId: customerId});
         // Check if ID is valid.
-        isValid = !isNaN(customerId) && customerId === customerResults.recordset[0].customerId; //returns true if customerId matches any customer
+        isValid = !customerId && customerId === customerResults?.recordset[0].customerId; //returns true if customerId matches any customer
 
         // Check if cart is empty and get total cart value if not.
         let realProductList = [];

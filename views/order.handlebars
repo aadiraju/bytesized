@@ -1,25 +1,35 @@
 <div class="text-7xl font-black text-center mb-4">Your Order Summary;</div>
-<div class="flex items-center justify-center">
-    <table class="shadow-lg bg-white">
-        <thead>
-        <tr>
-            <th class="bg-black border text-center text-white px-8 py-4">Product Id</th>
-            <th class="bg-black border text-center text-white px-8 py-4">Product Name</th>
-            <th class="bg-black border text-center text-white px-8 py-4">Quantity</th>
-            <th class="bg-black border text-center text-white px-8 py-4">Price</th>
-            <th class="bg-black border text-center text-white px-8 py-4">Subtotal</th>
-        </tr>
-        </thead>
-        <tbody>
-        {{#each realProductList}}
-            <tr>
-                <td class="border text-center px-8 py-4">{{this.id}}</td>
-                <td class="border text-left px-8 py-4">{{this.name}}</td>
-                <td class="border text-center px-8 py-4">{{this.quantity}}</td>
-                <td class="border text-left px-8 py-4">{{this.price}}</td>
-                <td class="border text-left px-8 py-4">{{subtotalFormat this}}</td>
-            </tr>
-        {{/each}}
-        </tbody>
-    </table>
-</div>
+{{#if isValid}}
+    {{#if cartSize}}
+        <div class="flex items-center justify-center">
+            <table class="shadow-lg bg-white">
+                <thead>
+                <tr>
+                    <th class="bg-black border text-center text-white px-8 py-4">Product Id</th>
+                    <th class="bg-black border text-center text-white px-8 py-4">Product Name</th>
+                    <th class="bg-black border text-center text-white px-8 py-4">Quantity</th>
+                    <th class="bg-black border text-center text-white px-8 py-4">Price</th>
+                    <th class="bg-black border text-center text-white px-8 py-4">Subtotal</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each realProductList}}
+                    <tr>
+                        <td class="border text-center px-8 py-4">{{this.id}}</td>
+                        <td class="border text-left px-8 py-4">{{this.name}}</td>
+                        <td class="border text-center px-8 py-4">{{this.quantity}}</td>
+                        <td class="border text-left px-8 py-4">{{this.price}}</td>
+                        <td class="border text-left px-8 py-4">{{subtotalFormat this}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+    {{else}}
+        <div class="text-2xl font-extralight text-center mb-4">Your cart is empty. <a class="underline font-black"
+                                                                                      href="/listprod">Go shopping</a>
+        </div>
+    {{/if}}
+{{else}}
+    <div class="text-2xl font-extralight text-center mb-4">Invalid user. Try to order again!</div>
+{{/if}}
