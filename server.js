@@ -17,7 +17,7 @@ const app = express();
 dbConfig = {
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
-    server: process.env.DEPLOYED ? '172.17.0.1' : '127.0.0.1',
+    server: '10.7.112.4',
     database: process.env.DB_NAME,
     port: 1433,
     options: {
