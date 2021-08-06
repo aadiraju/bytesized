@@ -34,7 +34,7 @@ router.get('/', function (req, res, next) {
         let preppedSql = new sql.PreparedStatement(pool);
         preppedSql.input('customerId', sql.Int);
         await preppedSql.prepare(customerIDQuery);
-        let customerResults = await preppedSql.execute({customerId: customerId});
+        let customerResults = await preppedSql.execute({ customerId: customerId });
 
         // Check if ID is valid.
         for (let customer of customerResults.recordset) {
@@ -46,13 +46,15 @@ router.get('/', function (req, res, next) {
             validIDstr = 'Invalid Customer ID';
         }
 
-        // Check if cart is empty.
+        // Check if cart is empty and get total cart value if not.
         let totalAmount = 0.0;
-        if (productList) {
+        if (productList !== false) {
             cartSize = productList.length;
 
-            for (let i = 0; i < cartSize; i++) {
-                totalAmount += productList.productPrice
+            for (let item of productList) {
+                if (item === null)
+                    continue;
+                totalAmount += item.quantity * item.price;
             }
         } else {
             cartSize = 'The cart is empty!!';
@@ -85,12 +87,13 @@ router.get('/', function (req, res, next) {
             customerId: customerResults.recordset[0].customerId
         });
 
-        return [validIDstr, cartSize];
-    })().then(([validIDstr, cartSize]) => {
+        return [cartSize, totalAmount, validIDstr];
+    })().then(([cartSize, totalAmount, validIDstr]) => {
         res.render('order', {
             title: 'Bytesized Customer Order',
-            validIDstr: validIDstr,
             cartSize: cartSize,
+            totalAmount: totalAmount,
+            validIDstr: validIDstr,
             helpers: {
                 priceFormat
             }
