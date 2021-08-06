@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config({path: __dirname + '/.env'});
 const exphbs = require('express-handlebars');
 const session = require('express-session')
 
@@ -14,10 +15,11 @@ const app = express();
 
 // This DB Config is accessible globally
 dbConfig = {
-    user: 'SA',
-    password: 'YourStrong@Passw0rd',
-    server: 'db',
-    database: 'tempdb',
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    server: '127.0.0.1',
+    database: process.env.DB_NAME,
+    port: 1433,
     options: {
         'enableArithAbort': true,
         'encrypt': false,

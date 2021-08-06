@@ -5,13 +5,14 @@
   "repository": "N/A",
   "main": "server.js",
   "scripts": {
-    "startDev" : "nodemon -L server.js",
+    "startDev": "nodemon -L server.js",
     "start": "node server.js",
     "build:css": "postcss public/stylesheets/tailwind.css -o public/stylesheets/style.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-handlebars": "^5.1.0",
     "express-session": "^1.17.1",
