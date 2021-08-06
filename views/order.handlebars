@@ -1,6 +1,7 @@
 <div class="text-7xl font-black text-center mb-4">Your Order Summary;</div>
 {{#if isValid}}
     {{#if cartSize}}
+        <!--Display cart only if it has items-->
         <div class="flex items-center justify-center">
             <table class="shadow-lg bg-white">
                 <thead>
@@ -26,10 +27,12 @@
             </table>
         </div>
     {{else}}
+        <!--Error message if it doesn't have items-->
         <div class="text-2xl font-extralight text-center mb-4">Your cart is empty. <a class="underline font-black"
                                                                                       href="/listprod">Go shopping</a>
         </div>
     {{/if}}
 {{else}}
+    <!--Display error when userid is invalid-->
     <div class="text-2xl font-extralight text-center mb-4">Invalid user. Try to order again!</div>
 {{/if}}
