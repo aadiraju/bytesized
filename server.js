@@ -58,7 +58,8 @@ app.use('/order', order);
 // Rendering the main page
 app.get('/', function (req, res) {
     res.render('index', {
-        title: "Bytesized Main Page"
+        title: "Bytesized Main Page",
+        active: {'home': true}
     });
 })
 
