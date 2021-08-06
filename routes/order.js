@@ -30,7 +30,9 @@ router.get('/', function (req, res, next) {
         let pool = await sql.connect(dbConfig);
 
         // Query for customer information.
-        let customerIDQuery = 'SELECT customerId, address, city, state, postalCode, country, userid FROM customer WHERE customerId=@customerId';
+        let customerIDQuery = `SELECT customerId, address, city, state, postalCode, country, userid
+                                FROM customer
+                                WHERE customerId=@customerId`;
         let preppedSql = new sql.PreparedStatement(pool);
         preppedSql.input('customerId', sql.Int);
         await preppedSql.prepare(customerIDQuery);
@@ -63,7 +65,9 @@ router.get('/', function (req, res, next) {
         // Insert order into ordersummary table.
         let date = new Date();
         let dateStr = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
-        let ordersummaryInsert = 'INSERT INTO ordersummary (orderDate, totalAmount, shiptoAddress, shiptoCity, shiptoState, shiptoPostalCode, shiptoCountry, customerId) VALUES (@orderDate, @totalAmount, @address, @city, @state, @postalCode, @country, @customerId);';
+        let ordersummaryInsert = `INSERT INTO ordersummary (orderDate, totalAmount, shiptoAddress, shiptoCity, shiptoState, shiptoPostalCode, shiptoCountry, customerId)
+                                    OUTPUT INSERTED.orderId
+                                    VALUES (@orderDate, @totalAmount, @address, @city, @state, @postalCode, @country, @customerId);`;
 
         preppedSql = new sql.PreparedStatement(pool);
         preppedSql.input('orderDate', sql.DateTime);
@@ -87,11 +91,14 @@ router.get('/', function (req, res, next) {
             customerId: customerResults.recordset[0].customerId
         });
 
-        return [cartSize, totalAmount, validIDstr];
-    })().then(([cartSize, totalAmount, validIDstr]) => {
+        let orderId = orderResults.recordset[0].orderId;
+        
+        return [cartSize, orderId, totalAmount, validIDstr];
+    })().then(([cartSize, orderId, totalAmount, validIDstr]) => {
         res.render('order', {
             title: 'Bytesized Customer Order',
             cartSize: cartSize,
+            orderId: orderId,
             totalAmount: totalAmount,
             validIDstr: validIDstr,
             helpers: {
@@ -102,11 +109,6 @@ router.get('/', function (req, res, next) {
         console.dir(err);
         res.send(err);
     });
-
-
-    /** Make connection and validate **/
-
-    /** Save order information to database**/
 
 
     /**
