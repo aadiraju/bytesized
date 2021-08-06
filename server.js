@@ -1,5 +1,4 @@
 const express = require('express');
-require('dotenv').config({path: __dirname + '/.env'});
 const exphbs = require('express-handlebars');
 const session = require('express-session')
 
@@ -25,7 +24,6 @@ dbConfig = {
         'encrypt': false,
     }
 }
-
 // Setting up the session.
 // This uses MemoryStorage which is not
 // recommended for production use.
