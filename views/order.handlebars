@@ -1,8 +1,45 @@
-<body>
-<h1 align="center"><b>Order Page</b></span></h1>
-
-<p>Your customer ID is: {{this.validIDstr}}</span></p>
-<p>Number of Items in Cart: {{this.cartSize}}</span></p>
-<p>The cart subtotal is: {{priceFormat this.totalAmount}}</p>
-<p>Your order ID is: {{this.orderId}}</p>
-</body>
+<div class="text-7xl font-black text-center mb-4">Order List;</div>
+<div class="flex items-center justify-center">
+    <table class="shadow-lg bg-white">
+        <thead>
+            <tr>
+                <th class="bg-black border text-center text-white px-8 py-4">Order Id</th>
+                <th class="bg-black border text-center text-white px-8 py-4">Order Date</th>
+                <th class="bg-black border text-center text-white px-8 py-4">Customer Id</th>
+                <th class="bg-black border text-center text-white px-8 py-4">Customer Name</th>
+                <th class="bg-black border text-center text-white px-8 py-4">Total Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each ordList}}
+            <tr>
+                <td class="border text-center px-8 py-4">{{this.orderId}}</td>
+                <td class="border text-left px-8 py-4">{{ dateTimeFormat this.ordDate}}</td>
+                <td class="border text-center px-8 py-4">{{this.customerId}}</td>
+                <td class="border text-left px-8 py-4">{{this.customerName}}</td>
+                <td class="border text-left px-8 py-4">{{priceFormat this.totalAmount}}</td>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    <table class="border">
+                        <tr>
+                            <th class="px-8 py-4">Product Id</th>
+                            <th class="px-8 py-4">Quantity</th>
+                            <th class="px-8 py-4">Price</th>
+                        </tr>
+                        <tbody>
+                            {{#each this.prodInOrd}}
+                            <tr>
+                                <td class="border text-center px-8 py-4">{{this.productId}}</td>
+                                <td class="border text-center px-8 py-4">{{this.quantity}}</td>
+                                <td class="border text-left px-8 py-4">{{priceFormat this.price}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

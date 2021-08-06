@@ -2,7 +2,7 @@
 <div class="flex items-center justify-center px-4 py-3">
     <div class="w-1/2 mx-auto shadow-lg rounded-md p-4 bg-white">
         <p class="text-2xl font-extrabold py-2">Order Summary</p>
-        <form method="get" action="listprod">
+        <form method="get" action="checkout">
             <div class="flex gap-2 flex-row-center content-evenly">
                 <div class="relative flex-1">
                     <label for="total"
@@ -15,7 +15,13 @@
                 </div>
                 <div class="relative flex-2 pt-7">
                     <button type="submit" class="bg-black text-white font-extrabold text-md px-4 py-2">Check Out</button>
-                    <button type="reset" class="outline-black text-black font-extrabold text-md px-4 py-1">Continue Shopping</button>
+                </div>
+            </div>
+        </form>
+        <form method="get" action="listprod">
+            <div class="flex gap-2 flex-row-center content-evenly">
+                <div class="relative flex-2 pt-7">
+                    <button type="submit" class="outline-black text-black font-extrabold text-md px-4 py-1">Continue Shopping</button>
                 </div>
             </div>
         </form>
