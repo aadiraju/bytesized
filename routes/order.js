@@ -15,6 +15,7 @@ router.get('/', function (req, res, next) {
     let cartSize = '';
     let isValid = false;
 
+    // Get the product list
     let productList = false;
     if (req.session.productList && req.session.productList.length > 0) {
         productList = req.session.productList;
@@ -28,30 +29,61 @@ router.get('/', function (req, res, next) {
     (async function () {
         let pool = await sql.connect(dbConfig);
 
-        let custIDQuery = 'SELECT customerId FROM customer'
-
+        // Query for customer information.
+        let customerIDQuery = 'SELECT customerId, address, city, state, postalCode, country, userid FROM customer WHERE customerId=@customerId';
         let preppedSql = new sql.PreparedStatement(pool);
         preppedSql.input('customerId', sql.Int);
-        await preppedSql.prepare(custIDQuery);
-
-        let results = await preppedSql.execute({});
+        await preppedSql.prepare(customerIDQuery);
+        let customerResults = await preppedSql.execute({customerId: customerId});
 
         // Check if ID is valid.
-        for (let cid of results.recordset)
-        {
-            if (!isNaN(customerId) && customerId == cid.customerId)
-                isValid = true;
+        for (let customer of customerResults.recordset) {
+            isValid = !isNaN(customerId) && customerId == customer.customerId;
+            if (isValid)
+                break;
         }
-
         if (!isValid) {
             validIDstr = 'Invalid Customer ID';
         }
 
+        // Check if cart is empty.
+        let totalAmount = 0.0;
         if (productList) {
             cartSize = productList.length;
+
+            for (let i = 0; i < cartSize; i++) {
+                totalAmount += productList.productPrice
+            }
         } else {
             cartSize = 'The cart is empty!!';
         }
+
+        // Insert order into ordersummary table.
+        let date = new Date();
+        let dateStr = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+        let ordersummaryInsert = 'INSERT INTO ordersummary (orderDate, totalAmount, shiptoAddress, shiptoCity, shiptoState, shiptoPostalCode, shiptoCountry, customerId) VALUES (@orderDate, @totalAmount, @address, @city, @state, @postalCode, @country, @customerId);';
+
+        preppedSql = new sql.PreparedStatement(pool);
+        preppedSql.input('orderDate', sql.DateTime);
+        preppedSql.input('totalAmount', sql.Decimal(10, 2));
+        preppedSql.input('address', sql.VarChar(50));
+        preppedSql.input('city', sql.VarChar(40));
+        preppedSql.input('state', sql.VarChar(20));
+        preppedSql.input('postalCode', sql.VarChar(20));
+        preppedSql.input('country', sql.VarChar(40));
+        preppedSql.input('customerId', sql.Int);
+        await preppedSql.prepare(ordersummaryInsert);
+
+        let orderResults = await preppedSql.execute({
+            orderDate: dateStr,
+            totalAmount: totalAmount,
+            address: customerResults.recordset[0].address,
+            city: customerResults.recordset[0].city,
+            state: customerResults.recordset[0].state,
+            postalCode: customerResults.recordset[0].postalCode,
+            country: customerResults.recordset[0].country,
+            customerId: customerResults.recordset[0].customerId
+        });
 
         return [validIDstr, cartSize];
     })().then(([validIDstr, cartSize]) => {
