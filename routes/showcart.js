@@ -23,14 +23,16 @@ router.get('/', function (req, res, next) {
             total += item.quantity * item.price;
         }
     }
+    let cartSize = productList.length;
 
     (async function () {
-        return [productList, total];
-    })().then(([productList, total]) => {
+        return [productList, total, cartSize];
+    })().then(([productList, total, cartSize]) => {
         res.render('showcart', {
             title: 'Bytesized Cart',
             productList: productList,
             total: total,
+            cartSize: cartSize,
             helpers: {
                 priceFormat
             },
