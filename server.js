@@ -9,6 +9,7 @@ let addCart = require('./routes/addcart');
 let showCart = require('./routes/showcart');
 let checkout = require('./routes/checkout');
 let order = require('./routes/order');
+let customerAuth = require('./routes/customerAuth');
 
 const app = express();
 
@@ -53,6 +54,7 @@ app.use('/listprod', listProd);
 app.use('/addcart', addCart);
 app.use('/showcart', showCart);
 app.use('/checkout', checkout);
+app.use('/customerAuth', customerAuth);
 app.use('/order', order);
 
 // Rendering the main page

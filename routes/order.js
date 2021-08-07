@@ -10,10 +10,20 @@ const subtotalFormat = (product) => {
     return 'CAD$ ' + (Number(product.price) * Number(product.quantity)).toFixed(2);
 };
 
-router.get('/', function (req, res, next) {
-    res.setHeader('Content-Type', 'text/html');
+//function to check the authentication status of the user before rendering the page. Checking if customerId/password is valid moved to customerAuth.js
+function checkAuth(req, res, next) {
+    if (req.session.customerAuth && req.session.customerAuth.authenticated)
+        next();
+    else {
+        //invalid auth send to checkout with error
+        req.session.invalidPassword = true;
+        res.redirect("/checkout");
+    }
+}
 
-    let customerId = req.query ? Number(req.query.customerId) : null;
+router.get('/', checkAuth, function (req, res, next) {
+
+    let customerId = req.session.customerAuth.customerId;
     let cartSize = 0;
     let isValid = false;
     let orderId = null;
@@ -33,15 +43,20 @@ router.get('/', function (req, res, next) {
         let pool = await sql.connect(dbConfig);
 
         // Query for customer information.
-        let customerIDQuery = `SELECT customerId, address, city, state, postalCode, country, userid
+        let customerIDQuery = `SELECT firstName,
+                                      lastName,
+                                      address,
+                                      city,
+                                      state,
+                                      postalCode,
+                                      country,
+                                      userid
                                FROM customer
                                WHERE customerId = @customerId`;
         let preppedSql = new sql.PreparedStatement(pool);
         preppedSql.input('customerId', sql.Int);
         await preppedSql.prepare(customerIDQuery);
         let customerResults = await preppedSql.execute({customerId: customerId});
-        // Check if ID is valid.
-        isValid = !customerId && customerId === customerResults?.recordset[0].customerId; //returns true if customerId matches any customer
 
         // Check if cart is empty and get total cart value if not.
         let realProductList = [];
@@ -57,7 +72,7 @@ router.get('/', function (req, res, next) {
         cartSize = realProductList.length;
 
         if (cartSize > 0) {
-            // Insert order into ordersummary table only if there is a product in the cart
+            // Insert order into orderSummary table only if there is a product in the cart
             let date = new Date();
             let dateStr = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
             let ordersummaryInsert = `INSERT INTO ordersummary (orderDate, totalAmount, shiptoAddress, shiptoCity,
@@ -117,15 +132,14 @@ router.get('/', function (req, res, next) {
         req.session.productList = [];
 
         pool.close();
-        return [cartSize, realProductList, orderId, totalAmount, isValid, customerResults.recordset[0]];
-    })().then(([cartSize, realProductList, orderId, totalAmount, isValid, custData]) => {
+        return [cartSize, realProductList, orderId, totalAmount, customerResults.recordset[0]];
+    })().then(([cartSize, realProductList, orderId, totalAmount, custData]) => {
         res.render('order', {
             title: 'Bytesized Customer Order',
             cartSize: cartSize,
             realProductList: realProductList,
             orderId: orderId,
             totalAmount: totalAmount,
-            isValid: isValid,
             custData: custData,
             helpers: {
                 priceFormat,
