@@ -42,6 +42,7 @@
                     <th class="bg-black border text-left text-white px-8 py-4">Product Name</th>
                     <th class="bg-black border text-left text-white px-8 py-4">Quantity</th>
                     <th class="bg-black border text-left text-white px-8 py-4">Price</th>
+                    <th class="bg-black border text-left text-white px-8 py-4">Subtotal</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -64,6 +65,7 @@
                         <td class="border text-left px-8 py-4">{{this.name}}</td>
                         <td class="border text-left px-8 py-4">{{this.quantity}}</td>
                         <td class="border text-left px-8 py-4">{{priceFormat this.price}}</td>
+                        <td class="border text-left px-8 py-4">{{priceFormat this.subtotal}}</td>
                     </tr>
                 {{/each}}
                 </tbody>
