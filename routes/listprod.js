@@ -67,7 +67,8 @@ router.get('/', function (req, res, next) {
             helpers: {
                 priceFormat,
                 makeAddCartURL
-            }
+            },
+            active: {'listprod': true}
         });
     })
         .catch(err => {

@@ -1,0 +1,29 @@
+<div class="flex mt-10">
+    <div class="inset-x-0 top-0 sticky m-auto">
+        <nav class="flex gap-8 flex-row">
+            {{#if active.home}}
+                <a href="/" class="underline">Home</a>
+            {{else}}
+                <a href="/">Home</a>
+            {{/if}}
+
+            {{#if active.showcart}}
+                <a href="/showcart" class="underline">Cart</a>
+            {{else}}
+                <a href="/showcart">Cart</a>
+            {{/if}}
+
+            {{#if active.listprod}}
+                <a href="/listprod" class="underline">Products</a>
+            {{else}}
+                <a href="/listprod">Products</a>
+            {{/if}}
+
+            {{#if active.listorder}}
+                <a href="/listorder" class="underline">Orders</a>
+            {{else}}
+                <a href="/listorder">Orders</a>
+            {{/if}}
+        </nav>
+    </div>
+</div>

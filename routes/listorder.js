@@ -73,7 +73,8 @@ router.get('/', function (req, res, next) {
                 helpers: {
                     priceFormat,
                     dateTimeFormat
-                }
+                },
+                active: {'listorder': true}
             });
         }).catch(err => {
         console.dir(err);

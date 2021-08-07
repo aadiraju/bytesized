@@ -33,7 +33,8 @@ router.get('/', function (req, res, next) {
             total: total,
             helpers: {
                 priceFormat
-            }
+            },
+            active: {'showcart': true}
         });
     })
         .catch(err => {
