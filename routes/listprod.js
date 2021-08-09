@@ -62,6 +62,7 @@ router.get('/', function (req, res, next) {
     })().then(([prodList, catList]) => {
         res.render('listprod', {
             title: 'Bytesized Product List',
+            username: req.session.authenticatedUser,
             prodList: prodList,
             catList: catList,
             helpers: {

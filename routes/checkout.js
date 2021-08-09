@@ -6,6 +6,7 @@ router.get('/', function (req, res, next) {
 
     res.render('checkout', {
         title: 'Bytesized Checkout',
+        username: req.session.authenticatedUser,
         invalid: invalid
     });
 });

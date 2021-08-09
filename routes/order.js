@@ -136,6 +136,7 @@ router.get('/', checkAuth, function (req, res, next) {
     })().then(([cartSize, realProductList, orderId, totalAmount, custData]) => {
         res.render('order', {
             title: 'Bytesized Customer Order',
+            username: req.session.authenticatedUser,
             cartSize: cartSize,
             realProductList: realProductList,
             orderId: orderId,

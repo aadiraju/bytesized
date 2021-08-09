@@ -8,10 +8,9 @@ const priceFormat = (price) => {
     return '$' + Number(price).toFixed(2);
 };
 
-const dateFormat = (datetime) => {
-    date = datetime.toISOString().split('T')[0];
-    return date;
-
+const dateFormat = (date) => {
+    const options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+    return date.toLocaleDateString("en-US", options);
 };
 
 function loginAuth(req, res, next) {
@@ -26,21 +25,24 @@ function loginAuth(req, res, next) {
 
 router.get('/', loginAuth, function (req, res, next) {
 
+    let pool;
     (async function () {
-        let pool = await sql.connect(dbConfig);
-        let orderReportSQL = `select cast(orderDate as DATE) as groupedOrderDate, sum(totalAmount) as totalDayAmount
+        pool = await sql.connect(dbConfig);
+        let orderReportSQL = `select cast(orderDate as DATE)       as groupedOrderDate,
+                                     coalesce(sum(totalAmount), 0) as totalDayAmount
                               from ordersummary
                               group by cast(orderDate as DATE)
                               order by groupedOrderDate ASC;
         `;
 
         let orderReport = await pool.request().query(orderReportSQL);
+        return [orderReport.recordset];
+    })().then(([orderList]) => {
         pool.close();
-        return orderReport.recordset;
-    })().then(([orderReport]) => {
         res.render('admin', {
             title: 'Bytesized Admin Page',
-            orderReport: orderReport,
+            username: req.session.authenticatedUser,
+            orderList: orderList,
             helpers: {
                 priceFormat,
                 dateFormat
