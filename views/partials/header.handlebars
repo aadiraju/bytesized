@@ -24,6 +24,40 @@
             {{else}}
                 <a href="/listorder">Orders</a>
             {{/if}}
+
+            {{#if active.customer}}
+                <a href="/customer" class="underline">Customer Info</a>
+            {{else}}
+                <a href="/customer">Customer Info</a>
+            {{/if}}
+
+            {{#if active.admin}}
+                <a href="/admin" class="underline">Administrator Panel</a>
+            {{else}}
+                <a href="/admin">Administrator Panel</a>
+            {{/if}}
         </nav>
+        <div class="flex flex-row">
+            {{#if username}}
+                <div class="mr-2 place-self-center">Signed in as : {{username}}</div>
+                <button class="transition duration-600 ease-in-out border-2 border-black text-black font-extrabold m-2 p-2
+            hover:bg-black hover:text-white transform hover:scale-110">
+                    <a href="/logout">Logout</a>
+                </button>
+            {{else}}
+                {{#if active.login}}
+                    <button class="transition duration-600 ease-in-out border-2 border-black text-black font-extrabold mr-4 px-2 py-1
+            hover:bg-black hover:text-white transform hover:scale-110">
+                        <a href="/login" class="underline">Login</a>
+                    </button>
+                {{else}}
+                    <button class="transition duration-600 ease-in-out border-2 border-black text-black font-extrabold mr-4 px-2 py-1
+            hover:bg-black hover:text-white transform hover:scale-110">
+                        <a href="/login">Login</a>
+                    </button>
+                {{/if}}
+            {{/if}}
+        </div>
     </div>
+
 </div>

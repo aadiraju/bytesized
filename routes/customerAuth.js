@@ -15,7 +15,7 @@ router.post('/', function (req, res, next) {
     }
 
     let retrievedPassword = false;
-
+    let pool = null;
     (async function () {
         try {
 
@@ -26,7 +26,7 @@ router.post('/', function (req, res, next) {
             `;
 
             if (Number.isInteger(customerId)) { //only works when customerId is a valid Integer
-                let pool = await sql.connect(dbConfig);
+                pool = await sql.connect(dbConfig);
 
                 const passwordPS = new sql.PreparedStatement(pool);
                 passwordPS.input('customerId', sql.Int);
@@ -53,6 +53,8 @@ router.post('/', function (req, res, next) {
             req.session.invalidPassword = true;
             res.redirect("/checkout");
         }
+    }).finally(() => {
+        pool.close();
     });
 
 });

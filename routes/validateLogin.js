@@ -3,41 +3,63 @@ const router = express.Router();
 const auth = require('../auth');
 const sql = require('mssql');
 
-router.post('/', function(req, res) {
+router.use(express.urlencoded({extended: true}));
+
+router.post('/', function (req, res) {
     // Have to preserve async context since we make an async call
     // to the database in the validateLogin function.
     (async () => {
         let authenticatedUser = await validateLogin(req);
         if (authenticatedUser) {
+            req.session.authenticatedUser = authenticatedUser;
             res.redirect("/");
         } else {
+            req.session.loginMessage = "Access Denied, check your username and/or password";
             res.redirect("/login");
         }
-     })();
+    })();
 });
 
 async function validateLogin(req) {
-    if (!req.body || !req.body.username || !req.body.password) {
-        return false;
+    let body = req.body;
+    let userId = null;
+    let password = null;
+    if (body.userId != null && body.pass != null) {
+        userId = body.userId;
+        password = body.pass;
     }
-
-    let username = req.body.username;
-    let password = req.body.password;
-    let authenticatedUser =  await (async function() {
+    let retrievedPassword = false;
+    let pool = null;
+    return await (async function () { //returns the username if user exists, or false if they don't
         try {
-            let pool = await sql.connect(dbConfig);
+            pool = await sql.connect(dbConfig);
+            let passwordQuery = `
+                SELECT password
+                FROM customer
+                WHERE userid = @userId;
+            `;
 
-	// TODO: Check if userId and password match some customer account. 
-	// If so, set authenticatedUser to be the username.
+            const passwordPS = new sql.PreparedStatement(pool);
+            passwordPS.input('userId', sql.VarChar(20));
+            await passwordPS.prepare(passwordQuery);
 
-           return false;
-        } catch(err) {
+            let passwordResults = await passwordPS.execute({userId: userId});
+            if (passwordResults.recordset.length) { //true only if customer exists in DB
+                retrievedPassword = passwordResults.recordset[0].password;
+            }
+
+        } catch (err) {
             console.dir(err);
             return false;
         }
-    })();
-
-    return authenticatedUser;
+    })().then(() => {
+        if (password != null && retrievedPassword && retrievedPassword === password) {
+            return userId;
+        } else
+            return false;
+    }).finally(() => {
+        pool.close();
+    });
 }
 
 module.exports = router;

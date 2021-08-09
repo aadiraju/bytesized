@@ -1,0 +1,19 @@
+<div class="text-7xl font-black text-center mb-4">Admin Page;</div>
+<div class="flex items-center justify-center">
+    <table class="shadow-lg bg-white">
+        <thead>
+        <tr>
+            <th class="bg-black border text-center text-white px-8 py-4">Date</th>
+            <th class="bg-black border text-center text-white px-8 py-4">Total Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each orderReport}}
+            <tr>
+                <td class="border text-left px-8 py-4">{{ dateFormat this.groupedOrderDate}}</td>
+                <td class="border text-left px-8 py-4">{{priceFormat this.totalDayAmount}}</td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
