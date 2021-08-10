@@ -5,6 +5,7 @@
       <list>
         <option value=".*.*\/.*.*" />
         <option value="master" />
+        <option value="deploy" />
       </list>
     </option>
   </component>

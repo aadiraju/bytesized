@@ -69,6 +69,7 @@ router.get('/', function (req, res, next) {
         .then(([ordList]) => {
             res.render('listorder', {
                 title: 'Bytesized Order List',
+                username: req.session.authenticatedUser,
                 ordList: ordList,
                 helpers: {
                     priceFormat,

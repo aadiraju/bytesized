@@ -30,6 +30,7 @@ router.get('/', function (req, res, next) {
     })().then(([productList, total, cartSize]) => {
         res.render('showcart', {
             title: 'Bytesized Cart',
+            username: req.session.authenticatedUser,
             productList: productList,
             total: total,
             cartSize: cartSize,
