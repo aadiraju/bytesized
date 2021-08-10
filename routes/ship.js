@@ -119,10 +119,11 @@ router.get('/', function (req, res) {
         .then(([ordList, valid, flag]) => {
             res.render('shipment', {
                 title: 'Bytesized Shipment',
+                username: req.session.authenticatedUser,
                 ordList: ordList,
                 valid: valid,
                 flag: flag,
-                active: {ship: true}
+                active: {ship: true},
             });
         })
         .catch(err => {
