@@ -1,29 +1,60 @@
-<div class="flex mt-10">
-    <div class="inset-x-0 top-0 sticky m-auto">
-        <nav class="flex gap-8 flex-row">
-            {{#if active.home}}
-                <a href="/" class="underline">Home</a>
-            {{else}}
-                <a href="/">Home</a>
-            {{/if}}
+<div class="bg-white mt-4 inset-x-0 top-0 sticky z-10">
+    <nav class="flex justify-center gap-8 flex-row">
+        {{#if active.home}}
+            <a href="/" class="underline">Home</a>
+        {{else}}
+            <a href="/">Home</a>
+        {{/if}}
 
-            {{#if active.showcart}}
-                <a href="/showcart" class="underline">Cart</a>
-            {{else}}
-                <a href="/showcart">Cart</a>
-            {{/if}}
+        {{#if active.showcart}}
+            <a href="/showcart" class="underline">Cart</a>
+        {{else}}
+            <a href="/showcart">Cart</a>
+        {{/if}}
 
-            {{#if active.listprod}}
-                <a href="/listprod" class="underline">Products</a>
-            {{else}}
-                <a href="/listprod">Products</a>
-            {{/if}}
+        {{#if active.listprod}}
+            <a href="/listprod" class="underline">Products</a>
+        {{else}}
+            <a href="/listprod">Products</a>
+        {{/if}}
 
-            {{#if active.listorder}}
-                <a href="/listorder" class="underline">Orders</a>
-            {{else}}
-                <a href="/listorder">Orders</a>
-            {{/if}}
-        </nav>
+        {{#if active.listorder}}
+            <a href="/listorder" class="underline">Orders</a>
+        {{else}}
+            <a href="/listorder">Orders</a>
+        {{/if}}
+
+        {{#if active.customer}}
+            <a href="/customer" class="underline">Customer Info</a>
+        {{else}}
+            <a href="/customer">Customer Info</a>
+        {{/if}}
+
+        {{#if active.ship}}
+            <a href="/ship" class="underline">Shipments</a>
+        {{else}}
+            <a href="/ship">Shipments</a>
+        {{/if}}
+
+        {{#if active.admin}}
+            <a href="/admin" class="underline">Administrator Panel</a>
+        {{else}}
+            <a href="/admin">Administrator Panel</a>
+        {{/if}}
+    </nav>
+    <div class="absolute top-0 right-0 flex flex-row justify-end z-40">
+        {{#if username}}
+            <div class="mr-2 place-self-center">Signed in as : {{username}}</div>
+            <button class="transition duration-600 ease-in-out border-2 border-black text-black font-extrabold m-2 p-2
+            hover:bg-black hover:text-white transform hover:scale-110">
+                <a href="/logout">Logout</a>
+            </button>
+        {{else}}
+            <button class="transition duration-600 ease-in-out border-2 border-black text-black font-extrabold mr-4 px-2 py-1
+            hover:bg-black hover:text-white transform hover:scale-110">
+                <a href="/login">Login</a>
+            </button>
+        {{/if}}
     </div>
 </div>
+

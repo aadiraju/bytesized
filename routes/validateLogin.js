@@ -1,0 +1,65 @@
+const express = require('express');
+const router = express.Router();
+const auth = require('../auth');
+const sql = require('mssql');
+
+router.use(express.urlencoded({extended: true}));
+
+router.post('/', function (req, res) {
+    // Have to preserve async context since we make an async call
+    // to the database in the validateLogin function.
+    (async () => {
+        let authenticatedUser = await validateLogin(req);
+        if (authenticatedUser) {
+            req.session.authenticatedUser = authenticatedUser;
+            res.redirect("/");
+        } else {
+            req.session.loginMessage = "Access Denied, check your username and/or password";
+            res.redirect("/login");
+        }
+    })();
+});
+
+async function validateLogin(req) {
+    let body = req.body;
+    let userId = null;
+    let password = null;
+    if (body.userId != null && body.pass != null) {
+        userId = body.userId;
+        password = body.pass;
+    }
+    let retrievedPassword = false;
+    let pool = null;
+    return await (async function () { //returns the username if user exists, or false if they don't
+        try {
+            pool = await sql.connect(dbConfig);
+            let passwordQuery = `
+                SELECT password
+                FROM customer
+                WHERE userid = @userId;
+            `;
+
+            const passwordPS = new sql.PreparedStatement(pool);
+            passwordPS.input('userId', sql.VarChar(20));
+            await passwordPS.prepare(passwordQuery);
+
+            let passwordResults = await passwordPS.execute({userId: userId});
+            if (passwordResults.recordset.length) { //true only if customer exists in DB
+                retrievedPassword = passwordResults.recordset[0].password;
+            }
+
+        } catch (err) {
+            console.dir(err);
+            return false;
+        }
+    })().then(() => {
+        if (password != null && retrievedPassword && retrievedPassword === password) {
+            return userId;
+        } else
+            return false;
+    }).finally(() => {
+        pool.close();
+    });
+}
+
+module.exports = router;

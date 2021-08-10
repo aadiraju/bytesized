@@ -2,6 +2,7 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const session = require('express-session')
 
+let index = require('./routes/index');
 let loadData = require('./routes/loaddata');
 let listOrder = require('./routes/listorder');
 let listProd = require('./routes/listprod');
@@ -10,6 +11,14 @@ let showCart = require('./routes/showcart');
 let checkout = require('./routes/checkout');
 let order = require('./routes/order');
 let customerAuth = require('./routes/customerAuth');
+let login = require('./routes/login');
+let validateLogin = require('./routes/validateLogin');
+let logout = require('./routes/logout');
+let admin = require('./routes/admin');
+let product = require('./routes/product');
+let displayImage = require('./routes/displayImage');
+let customer = require('./routes/customer');
+let ship = require('./routes/ship');
 
 const app = express();
 
@@ -48,6 +57,7 @@ app.use(express.static(__dirname + '/public'));
 // Setting up Express.js routes.
 // These present a "route" on the URL of the site.
 // Eg: http://127.0.0.1/loaddata
+app.use('/', index);
 app.use('/loaddata', loadData);
 app.use('/listorder', listOrder);
 app.use('/listprod', listProd);
@@ -56,14 +66,14 @@ app.use('/showcart', showCart);
 app.use('/checkout', checkout);
 app.use('/customerAuth', customerAuth);
 app.use('/order', order);
-
-// Rendering the main page
-app.get('/', function (req, res) {
-    res.render('index', {
-        title: "Bytesized Main Page",
-        active: {'home': true}
-    });
-})
+app.use('/login', login);
+app.use('/validateLogin', validateLogin);
+app.use('/logout', logout);
+app.use('/admin', admin);
+app.use('/product', product);
+app.use('/displayImage', displayImage);
+app.use('/customer', customer);
+app.use('/ship', ship);
 
 // Starting our Express app
 app.listen(process.env.PORT || 3000)
