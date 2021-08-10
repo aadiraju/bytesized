@@ -30,6 +30,12 @@
             <a href="/customer">Customer Info</a>
         {{/if}}
 
+        {{#if active.ship}}
+            <a href="/ship" class="underline">Shipments</a>
+        {{else}}
+            <a href="/ship">Shipments</a>
+        {{/if}}
+
         {{#if active.admin}}
             <a href="/admin" class="underline">Administrator Panel</a>
         {{else}}
