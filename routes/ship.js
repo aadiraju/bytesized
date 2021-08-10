@@ -96,8 +96,9 @@ router.get('/', function (req, res) {
                                       select (productinventory.quantity - orderproduct.quantity) as remaining
                                       from productinventory
                                                join orderproduct on productinventory.productId = orderproduct.productId
-                                      where productinventory.productId = @id
-                                        and orderproduct.orderId = @orderId)`;
+                                      where orderproduct.orderId = @orderId
+                                      and productinventory.productId= @id)
+                                  where productinventory.productId = @id`;
                     preppedSql = new sql.PreparedStatement(pool);
                     preppedSql.input('id', sql.Int);
                     preppedSql.input('orderId', sql.Int)
