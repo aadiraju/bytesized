@@ -1,0 +1,59 @@
+<div class="text-7xl font-black text-center">{{this.productName}};</div>
+<div class="flex items-center justify-center px-4 py-3"><img class="object-cover" src={{makeImageURL this}}
+        alt={{this.productName}}></div>
+<div class="flex items-center justify-center">
+    <div class="col-span-12">
+        <table class="shadow-lg bg-white">
+            <thead>
+                <tr>
+                    <th class="bg-black border text-left text-white px-8 py-4">Product Image</th>
+                    <th class="bg-black border text-left text-white px-8 py-4">Product Name</th>
+                    <th class="bg-black border text-left text-white px-8 py-4">Description</th>
+                    <th class="bg-black border text-left text-white px-8 py-4">Category</th>
+                    <th class="bg-black border text-left text-white px-8 py-4">Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {{!-- <td
+                        class="px-5 hover:bg-gray-300 active:shadow-lg mouse shadow transition ease-in duration-200">
+                        <a href={{makeAddCartURL this}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 p-0" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </td> --}}
+                    <td class="border text-center">
+                        <img class="object-cover w-full" src={{this.productImageURL}} alt={{this.productName}}>
+                    </td>
+                    <td class="border text-left px-8 py-4">{{this.productName}}</td>
+                    <td class="border text-left px-8 py-4">{{this.productDescription}}</td>
+                    <td class="border text-left px-8 py-4">{{this.categoryName}}</td>
+                    <td class="border text-left px-8 py-4">{{priceFormat this.productPrice}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="flex items-center justify-center px-4 py-3">
+    <div class="flex gap-2 flex-row-center content-evenly">
+        <div class="relative flex-2 pt-7">
+            <a href={{makeAddCartURL this}}>
+                <button type="submit" class="bg-black text-white font-extrabold text-md px-4 py-2">Add to Cart
+                </button>
+            </a>
+        </div>
+    </div>
+    <form method="get" action="listprod">
+        <div class="flex gap-2 flex-row-center content-evenly">
+            <div class="relative flex-2 pt-7">
+                <button type="submit" class="outline-black text-black font-extrabold text-md px-4 py-1">Continue
+                    Shopping
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

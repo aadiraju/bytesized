@@ -62,7 +62,8 @@
                         <td class="border text-center px-20 py-4">
                             <img src={{this.productImageURL}} alt={{this.productName}}>
                         </td>
-                        <td class="border text-left px-8 py-4">{{this.name}}</td>
+                        {{!-- <td class="border text-left px-8 py-4">{{this.name}}</td> --}}
+                        <td class="border text-left px-8 py-4"><a href={{makeProductURL this.id this.name}}>{{this.name}}</a></td>
                         <td class="border text-left px-8 py-4">{{this.quantity}}</td>
                         <td class="border text-left px-8 py-4">{{priceFormat this.price}}</td>
                         <td class="border text-left px-8 py-4">{{priceFormat this.subtotal}}</td>

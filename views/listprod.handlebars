@@ -62,7 +62,9 @@
                     <td class="border text-center">
                         <img class="object-cover w-full" src={{this.productImageURL}} alt={{this.productName}}>
                     </td>
-                    <td class="border text-left px-8 py-4">{{this.productName}}</td>
+                    <td class="border text-left px-8 py-4">
+                        <a href={{makeProductURL this}}>{{this.productName}}</a>
+                    </td>
                     <td class="border text-left px-8 py-4">{{this.categoryName}}</td>
                     <td class="border text-left px-8 py-4">{{priceFormat this.productPrice}}</td>
                 </tr>
