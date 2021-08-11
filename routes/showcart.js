@@ -7,6 +7,11 @@ const priceFormat = (price) => {
     return 'CAD$ ' + Number(price).toFixed(2);
 };
 
+const makeProductURL = (id, name) => {
+    let prodName = encodeURIComponent(name); //makes the name URL safe
+    return `product?id=${id}&name=${prodName}`
+};
+
 // Request and rendering.
 router.get('/', function (req, res, next) {
     res.setHeader('Content-Type', 'text/html');
@@ -35,7 +40,8 @@ router.get('/', function (req, res, next) {
             total: total,
             cartSize: cartSize,
             helpers: {
-                priceFormat
+                priceFormat,
+                makeProductURL
             },
             active: {'showcart': true}
         });

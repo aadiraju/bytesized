@@ -13,6 +13,11 @@ const makeAddCartURL = (product) => {
     return `addcart?id=${product.productId}&name=${prodName}&price=${product.productPrice}`
 };
 
+const makeProductURL = (product) => {
+    let prodName = encodeURIComponent(product.productName); //makes the name URL safe
+    return `product?id=${product.productId}&name=${prodName}`
+};
+
 //request and rendering
 router.get('/', function (req, res, next) {
     res.setHeader('Content-Type', 'text/html');
@@ -67,7 +72,8 @@ router.get('/', function (req, res, next) {
             catList: catList,
             helpers: {
                 priceFormat,
-                makeAddCartURL
+                makeAddCartURL,
+                makeProductURL
             },
             active: {'listprod': true}
         });
