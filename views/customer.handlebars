@@ -1,24 +1,42 @@
+<div class="text-7xl font-black text-center mb-9">Customer Info;</div>
+<div class="flex items-center justify-center">
+    <table class="shadow-lg bg-white">
+        <thead>
+        <tr>
+            <th class="bg-black border text-center text-white px-8 py-4">Customer ID</th>
+            <th class="bg-black border text-center text-white px-8 py-4">First Name</th>
+            <th class="bg-black border text-center text-white px-8 py-4">Last Name</th>
+            <th class="bg-black border text-center text-white px-8 py-4">Email</th>
+            <th class="bg-black border text-center text-white px-8 py-4">Phone number</th>
+            <th class="bg-black border text-center text-white px-8 py-4">Customer Address</th>
+            <th class="bg-black border text-center text-white px-8 py-4">User ID</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="border text-center px-8 py-4">{{customer.customerId}}</td>
+            <td class="border text-center px-8 py-4">{{customer.firstName}}</td>
+            <td class="border text-left px-8 py-4">{{customer.lastName}}</td>
+            <td class="border text-center px-8 py-4">{{customer.email}}</td>
+            <td class="border text-left px-8 py-4">{{customer.phonenum}}</td>
+            <td class="border text-left px-8 py-4">
+                <div class="flex flex-col italic">
+                    <div class="font-semibold">
+                        {{customer.firstName}} {{customer.lastName}}
+                    </div>
+                    <div>
+                        {{customer.address}}
+                    </div>
+                    <div>
+                        {{customer.city}}, {{customer.state}} {{customer.postalCode}}
+                    </div>
+                    <div>
+                        {{customer.country}}
+                    </div>
+                </div>
+            </td>
+            <td class="border text-left px-8 py-4">{{customer.userid}}</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
-    <div class="flex items-center justify-center">
-        <table class="shadow-lg bg-white">
-            <thead>
-            <tr>
-                <th class="bg-black border text-center text-white px-8 py-4">First Name</th>
-                <th class="bg-black border text-center text-white px-8 py-4">Last Name</th>
-                <th class="bg-black border text-center text-white px-8 py-4">Email</th>
-                <th class="bg-black border text-center text-white px-8 py-4">Phone number</th>
-                <th class="bg-black border text-center text-white px-8 py-4">Customer Address</th>
-                <th class="bg-black border text-center text-white px-8 py-4">USER ID</th>
-            </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="border text-center px-8 py-4">{{this.firstName}}</td>
-                    <td class="border text-left px-8 py-4">{{this.lastName}}</td>
-                    <td class="border text-center px-8 py-4">{{this.email}}</td>
-                    <td class="border text-left px-8 py-4">{{this.phonenum}}</td>
-                    <td class="border text-left px-8 py-4">{{this.address}}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>

@@ -7,39 +7,34 @@ function loginAuth(req, res, next) {
     if (req.session.authenticatedUser)
         next();
     else {
-        //if login in invalid, send back to login page
-        req.session.loginMessage = "You havent logged in yet";
+        //If Customer tries to access page without being logged in, send to login page with appropriate error message
+        req.session.loginMessage = "You haven't logged in yet.";
         res.redirect("/login");
     }
 }
 
 router.get('/', loginAuth, function (req, res, next) {
-
-    res.setHeader('Content-Type', 'text/html');
-
-    let userid = req.session.userid;
-
-    // TODO: Print Customer information
+    let userid = req.session.authenticatedUser;
 
     (async function () {
         let pool = await sql.connect(dbConfig);
-        let customerIDQuery = `SELECT 
-                                    firstName,
-                                    lastName,
-                                    email,
-                                    phonenum,
-                                    address,
-                                    city,
-                                    state,
-                                    postalCode,
-                                    country,
-                                    userid
+        let customerIDQuery = `SELECT customerId,
+                                      firstName,
+                                      lastName,
+                                      email,
+                                      phonenum,
+                                      address,
+                                      city,
+                                      state,
+                                      postalCode,
+                                      country,
+                                      userid
                                FROM customer
                                WHERE userid = @userid;`
         let preppedSql = new sql.PreparedStatement(pool);
         preppedSql.input('userid', sql.VarChar(20));
         await preppedSql.prepare(customerIDQuery);
-        let customerResults = await preppedSql.execute({ userid: userid });
+        let customerResults = await preppedSql.execute({userid: userid});
         let customer = customerResults.recordset[0];
 
         pool.close();
@@ -49,7 +44,7 @@ router.get('/', loginAuth, function (req, res, next) {
             title: 'Bytesized Custmer Info',
             username: req.session.authenticatedUser,
             customer: customer,
-            active: { 'customer': true }
+            active: {'customer': true}
         });
     })
         .catch(err => {
