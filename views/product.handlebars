@@ -1,5 +1,5 @@
 <div class="text-7xl font-black text-center">{{product.productName}};</div>
-<div class="flex items-center justify-center px-4 py-3"><img class="object-cover" src={{makeImageURL product}}
+<div class="flex items-center justify-center px-4 py-3"><img class="object-cover" src={{makeImageURL product.productId}}
                                                              alt={{product.productName}} onerror="this.remove();"></div>
 <div class="flex items-center justify-center">
     <div class="col-span-12">
@@ -15,8 +15,13 @@
             </thead>
             <tbody>
             <tr>
-                <td class="border text-center">
-                    <img class="object-cover w-full" src={{product.productImageURL}} alt={{product.productName}}>
+                <td class="border w-1/4">
+                    <div class="flex justify-center">
+                        <div class="w-1/2">
+                            <img class="object-cover" src={{product.productImageURL}} alt={{product.productName}}
+                                 onerror="this.onerror=null; this.src='img/default.jpg'">
+                        </div>
+                    </div>
                 </td>
                 <td class="border text-left px-8 py-4">{{product.productName}}</td>
                 <td class="border text-left px-8 py-4">{{product.productDesc}}</td>

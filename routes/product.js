@@ -11,9 +11,8 @@ const makeAddCartURL = (product) => {
     return `addcart?id=${product.productId}&name=${prodName}&price=${product.productPrice}`;
 };
 
-const makeImageURL = (product) => {
-    let prodName = encodeURIComponent(product.productName); //makes the name URL safe
-    return `displayImage?id=${product.productId}&name=${prodName}`;
+const makeImageURL = (productId) => {
+    return `displayImage?id=${productId}`;
 };
 
 router.get('/', function (req, res, next) {
