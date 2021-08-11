@@ -33,8 +33,10 @@ router.get('/', function (req, res, next) {
                 return;
             } else {
                 let productImage = result.recordset[0].productImage;
-
-                res.write(productImage);
+                if (productImage)
+                    res.write(productImage);
+                else
+                    res.end();
             }
 
             pool.close();
