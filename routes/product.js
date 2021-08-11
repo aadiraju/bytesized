@@ -8,12 +8,12 @@ const priceFormat = (price) => {
 
 const makeAddCartURL = (product) => {
     let prodName = encodeURIComponent(product.productName); //makes the name URL safe
-    return `addcart?id=${product.productId}&name=${prodName}&price=${product.productPrice}`
+    return `addcart?id=${product.productId}&name=${prodName}&price=${product.productPrice}`;
 };
 
 const makeImageURL = (product) => {
     let prodName = encodeURIComponent(product.productName); //makes the name URL safe
-    return `displayImage?id=${product.productId}&name=${prodName}`
+    return `displayImage?id=${product.productId}&name=${prodName}`;
 };
 
 router.get('/', function (req, res, next) {
@@ -24,77 +24,32 @@ router.get('/', function (req, res, next) {
     (async function () {
         let pool = await sql.connect(dbConfig);
 
-        let getProductById = `SELECT * 
-                                FROM product p JOIN category c on p.categoryId = c.categoryId
-                                WHERE productId = @productId`;
+        let getProductById = `SELECT *
+                              FROM product p
+                                       JOIN category c on p.categoryId = c.categoryId
+                              WHERE productId = @productId`;
 
         let preppedSql = new sql.PreparedStatement(pool);
         preppedSql.input('productId', sql.Int);
         await preppedSql.prepare(getProductById);
 
-        let results = await preppedSql.execute({ productId: productId });
+        let results = await preppedSql.execute({productId: productId});
         let product = results.recordset[0];
-        let productName = product.productName;
-        let productPrice = product.productPrice;
-        let productImageURL = product.productImageURL;
-        let productImage = product.productImage;
-        let productDescription = product.productDescription;
-        let categoryId = product.categoryId;
-        let categoryName = product.categoryName;
-
-        if (productName === undefined)
-            productName = "N/A";
-        if (productPrice === undefined)
-            productPrice = "N/A";
-        if (productImageURL === undefined)
-            productImageURL = "N/A";
-        if (productImage === undefined)
-            productImage = "N/A";
-        if (productDescription === undefined)
-            productDescription = "N/A";
-        if (categoryId === undefined)
-            categoryId = "N/A";
-        if (categoryName === undefined)
-            categoryName = "N/A";
 
         pool.close();
-        return [
-            productId,
-            productName,
-            productPrice,
-            productImageURL,
-            productImage,
-            productDescription,
-            categoryId,
-            categoryName
-        ];
-    })().then(([
-        productId,
-        productName,
-        productPrice,
-        productImageURL,
-        productImage,
-        productDescription,
-        categoryId,
-        categoryName
-    ]) => {
+        return [productId, product];
+    })().then(([productId, product]) => {
         res.render('product', {
             title: 'Bytesized Product',
             username: req.session.authenticatedUser,
             productId: productId,
-            productName: productName,
-            productPrice: productPrice,
-            productImageURL: productImageURL,
-            productImage: productImage,
-            productDescription: productDescription,
-            categoryId: categoryId,
-            categoryName: categoryName,
+            product: product,
             helpers: {
                 priceFormat,
                 makeAddCartURL,
                 makeImageURL
             },
-            active: { 'product': true }
+            active: {'product': true}
         });
     })
         .catch(err => {

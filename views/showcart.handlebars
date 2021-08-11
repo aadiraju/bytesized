@@ -46,7 +46,7 @@
                 <tbody>
                 {{#each productList}}
                     <tr>
-                        <td class="border text-left px-8 py-4"><a href={{makeProductURL this.id this.name}}>{{this.name}}</a></td>
+                        <td class="border text-left px-8 py-4"><a href={{makeProductURL this.id this.name}} class="hover:underline">{{this.name}}</a></td>
                         <td class="border text-left px-8 py-4">{{this.quantity}}</td>
                         <td class="border text-left px-8 py-4">{{priceFormat this.price}}</td>
                         <td class="border text-left px-8 py-4">{{priceFormat this.subtotal}}</td>
