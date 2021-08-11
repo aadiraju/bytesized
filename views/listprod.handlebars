@@ -49,9 +49,9 @@
             <tbody>
             {{#each prodList}}
                 <tr>
-                    <td class="px-5 hover:bg-gray-300 active:shadow-lg mouse shadow transition ease-in duration-200">
-                        <a href={{makeAddCartURL this}}>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 p-0" viewBox="0 0 20 20"
+                    <td class="border">
+                        <a class="align-middle" href={{makeAddCartURL this}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto hover:shadow-inner mouse transition ease-in duration-200" viewBox="0 0 20 20"
                                  fill="currentColor">
                                 <path fill-rule="evenodd"
                                       d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
@@ -59,10 +59,17 @@
                             </svg>
                         </a>
                     </td>
-                    <td class="border text-center px-20 py-4">
-                        <img src={{this.productImageURL}} alt={{this.productName}}>
+                    <td class="border w-1/4">
+                        <div class="flex justify-center">
+                            <div class="w-1/2">
+                                <img class="object-cover" src={{this.productImageURL}} alt={{this.productName}}
+                                     onerror="this.onerror=null; this.src='img/default.jpg'">
+                            </div>
+                        </div>
                     </td>
-                    <td class="border text-left px-8 py-4">{{this.productName}}</td>
+                    <td class="border text-left px-8 py-4">
+                        <a href={{makeProductURL this}} class="hover:underline">{{this.productName}}</a>
+                    </td>
                     <td class="border text-left px-8 py-4">{{this.categoryName}}</td>
                     <td class="border text-left px-8 py-4">{{priceFormat this.productPrice}}</td>
                 </tr>

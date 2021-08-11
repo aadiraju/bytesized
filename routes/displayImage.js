@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const sql = require('mssql');
 
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
     res.setHeader('Content-Type', 'image/jpeg');
 
     let id = req.query.id;
@@ -12,11 +12,16 @@ router.get('/', function(req, res, next) {
         return;
     }
 
-    (async function() {
+    (async function () {
+        let result;
         try {
             let pool = await sql.connect(dbConfig);
 
-            let sqlQuery = "// TODO: Modify SQL to retrieve productImage given productId";
+            let sqlQuery = `
+                select productImage
+                from product
+                where productId = @id
+            `;
 
             result = await pool.request()
                 .input('id', sql.Int, idVal)
@@ -28,12 +33,15 @@ router.get('/', function(req, res, next) {
                 return;
             } else {
                 let productImage = result.recordset[0].productImage;
-
-                res.write(productImage);
+                if (productImage)
+                    res.write(productImage);
+                else
+                    res.end();
             }
 
+            pool.close();
             res.end()
-        } catch(err) {
+        } catch (err) {
             console.dir(err);
             res.write(err + "")
             res.end();
