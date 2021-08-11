@@ -37,6 +37,7 @@ router.get('/', function (req, res, next) {
                 res.write(productImage);
             }
 
+            pool.close();
             res.end()
         } catch (err) {
             console.dir(err);
