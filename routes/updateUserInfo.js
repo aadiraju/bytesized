@@ -7,20 +7,20 @@ router.use(express.urlencoded({extended: true}));
 
 router.post('/', function (req, res) {
     (async () => {
-        let newUser = await validateNewAcc(req);
-        if (newUser) {
-            req.session.authenticatedUser = newUser;
-            res.redirect("/");
+        let update = await updateAcc(req);
+        if (update) {
+            req.session.createAccMessage = "Account info updated";
+            res.redirect("/userAcc");
         } else {
-            req.session.createAccMessage = "Could not create new account. Re-check information and try again";
-            res.redirect("/createAcc");
+            req.session.createAccMessage = "Nothing to update";
+            res.redirect("/userAcc");
         }
     })();
 });
 
-async function validateNewAcc(req) {
-    let newUser = true;
 
+async function updateAcc(req) {
+    let update = true;
     let body = req.body;
     let firstName = null;
     let lastName = null;
@@ -52,30 +52,20 @@ async function validateNewAcc(req) {
         
         if (body.first == '' || body.last == '' || body.em == '' || body.phone  == '' || body.add  == '' ||
             body.cty  == '' || body.st  == '' || body.postal  == '' || body.ctry  == '' || body.user  == '' ||
-            body.pass  == ''){
-                newUser = false;
+            body.pass  == '' || body.first == null || body.last == null  || body.em == null || body.phone  == null || body.add  == null ||
+            body.cty  == null|| body.st  == null|| body.postal  == null|| body.ctry  == null || body.user  == null ||
+            body.pass  == null){
+                update == false;
             }
 
         try {
             pool = await sql.connect(dbConfig);
-
-            let query = `Select * from customer`;
-            let customers = await pool.request().query(query);
-
-            for (let customer of customers.recordset) {
-                if(firstName === customer.firstName || lastName === customer.lastName || email === customer.email
-                    || phoneNum === customer.phonenum || address === customer.address || city === customer.city ||
-                    state === customer.state || postalCode === customer.postalCode || country === customer.country ||
-                    userName === customer.userid || password === customer.password){
-                        newUser = false;
-                    }
-            }
-
-            if (newUser == true){
-                let query2 = `insert into customer (firstName, lastName, email, phonenum, address, city, state, 
-                                postalCode, country, userid, password) VALUES (@firstName, @lastName, @email, @phoneNum, @address,
-                                    @city, @state, @postalCode, @country, @userName, @password)`;
-
+            if(update == true){
+                let query = `update customer 
+                            set firstName = @firstName, lastName = @lastName, email = @email, phonenum = @phoneNum, address = @address,
+                            city = @city, state = @state, postalCode = @postalCode, country = @country, userid = @userName, password = @password
+                            where userid = @user`;
+                
                 let preppedSql = new sql.PreparedStatement(pool);
 
                 preppedSql.input('firstName', sql.VarChar(40));
@@ -89,17 +79,20 @@ async function validateNewAcc(req) {
                 preppedSql.input('country', sql.VarChar(40));
                 preppedSql.input('userName', sql.VarChar(20));
                 preppedSql.input('password', sql.VarChar(30));
+                preppedSql.input('user', sql.VarChar(20));
 
-                await preppedSql.prepare(query2);
+                await preppedSql.prepare(query);
                 await preppedSql.execute({firstName: firstName, lastName: lastName, email: email, phoneNum: phoneNum, address: address,
-                    city: city, state: state, postalCode: postalCode, country: country, userName: userName, password: password});
+                    city: city, state: state, postalCode: postalCode, country: country, userName: userName, password: password, user: req.session.authenticatedUser});
+                
             }
-            pool.close()
-        } catch (err) {
+            
+            pool.close();
+        } catch(err) {
             console.dir(err);
         }
 
-   return await userName;
+        return await update;
 }
 
 module.exports = router;

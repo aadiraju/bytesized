@@ -21,6 +21,9 @@ let customer = require('./routes/customer');
 let ship = require('./routes/ship');
 let createAcc = require('./routes/createAcc');
 let newAccFormValidation = require('./routes/newAccFormValidation');
+let userAcc = require('./routes/userAcc');
+let editInfo = require('./routes/editInfo');
+let updateUserInfo = require('./routes/updateUserInfo');
 
 const app = express();
 
@@ -78,6 +81,9 @@ app.use('/customer', customer);
 app.use('/ship', ship);
 app.use('/createAcc', createAcc);
 app.use('/newAccFormValidation', newAccFormValidation);
+app.use('/userAcc', userAcc);
+app.use('/editInfo', editInfo);
+app.use('/updateUserInfo', updateUserInfo);
 
 // Starting our Express app
 app.listen(process.env.PORT || 3000)
