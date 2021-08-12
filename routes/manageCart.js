@@ -12,8 +12,7 @@ const addToCart = async (id, name, price, pool, session) => {
 
     // Update quantity if add same item to order again
     if (productList[id]) {
-        productList[id].quantity = productList[id].quantity + 1;
-        productList[id].subtotal = productList[id].price * productList[id].quantity;
+        await updateQtyInCart(productList[id], productList[id].quantity + 1, pool, session);
     } else {
         productList[id] = {
             "id": id,
@@ -56,11 +55,12 @@ const updateQtyInCart = async (id, newQty, pool, session) => {
     let productList = session.productList;
 
     //update only if newQty is a valid non-negative number
-    if (newQty < 0 || !Number.isSafeInteger(newQty))
+    if (newQty < 0 || !Number.isInteger(newQty))
         return;
 
     if (productList[id] && productList[id].quantity !== newQty) {
         productList[id].quantity = newQty;
+        productList[id].subtotal = productList[id].price * productList[id].quantity;
         if (newQty === 0) {
             // If new quantity entered is 0, just delete it from the cart
             session.productList = productList;
@@ -78,6 +78,7 @@ const updateQtyInCart = async (id, newQty, pool, session) => {
     }
 
     //TODO: either update DB here, or make another method that updates the product quantity from inCart and call that new method here
+    return;
 };
 
 //Fetches the cart from the database
@@ -89,9 +90,9 @@ const getDBCart = async (pool, session) => {
 
     // Query DB for an existing cart
     let cartQuery = `
-        SELECT incart.productId AS id, quantity, price, name
-        FROM incart
-        WHERE userId = @username
+        select incart.productId AS id, quantity, price, name, (price * quantity) AS subtotal
+        from incart
+        where userId = @username
     `;
     const preppedSql = new sql.PreparedStatement(pool);
     preppedSql.input("username", sql.VarChar);
@@ -112,7 +113,8 @@ const getDBCart = async (pool, session) => {
             "id": dbProd.id,
             "name": dbProd.name,
             "price": dbProd.price,
-            "quantity": dbProd.quantity
+            "quantity": dbProd.quantity,
+            "subtotal": dbProd.subtotal,
         };
     }
     return dbProducts;

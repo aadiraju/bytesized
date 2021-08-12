@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const sql = require('mssql');
+const manageCart = require('./manageCart');
 
 const priceFormat = (price) => {
     return 'CAD$ ' + Number(price).toFixed(2);
@@ -128,8 +129,8 @@ router.get('/', checkAuth, function (req, res, next) {
                 });
             }
         }
-        //clear session cart
-        req.session.productList = [];
+        //clear session cart and from DB
+        await manageCart.eraseCart(pool, req.session);
 
         pool.close();
         return [cartSize, realProductList, orderId, totalAmount, customerResults.recordset[0]];

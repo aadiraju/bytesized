@@ -12,6 +12,18 @@ const makeProductURL = (id, name) => {
     return `product?id=${id}&name=${prodName}`
 };
 
+const makeUpdateCartURLAdd = (id, quantity) => {
+    return `updateCart?id=${id}&qty=${Number(quantity + 1)}`
+};
+
+const makeUpdateCartURLSub = (id, quantity) => {
+    return `updateCart?id=${id}&qty=${Number(quantity - 1)}`
+};
+
+const makeRemoveCartURL = (id) => {
+    return `updateCart?id=${id}`
+};
+
 // Request and rendering.
 router.get('/', function (req, res, next) {
     res.setHeader('Content-Type', 'text/html');
@@ -20,7 +32,7 @@ router.get('/', function (req, res, next) {
     let productList = false;
     if (req.session.productList) {
         productList = req.session.productList;
-        productList = productList.filter(Object => Object)
+        productList = productList.filter(Object => Object);
 
         for (let item of productList) {
             if (item === null)
@@ -41,7 +53,10 @@ router.get('/', function (req, res, next) {
             cartSize: cartSize,
             helpers: {
                 priceFormat,
-                makeProductURL
+                makeProductURL,
+                makeUpdateCartURLAdd,
+                makeUpdateCartURLSub,
+                makeRemoveCartURL
             },
             active: {'showcart': true}
         });

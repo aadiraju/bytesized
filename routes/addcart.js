@@ -22,7 +22,7 @@ router.get('/', function (req, res, next) {
     let pool;
     (async function () {
         pool = await sql.connect(dbConfig);
-        await manageCart.addToCart(req.session, pool, id, name, price);
+        await manageCart.addToCart(id, name, price, pool, req.session);
     })().then(() => {
         pool.close();
         res.redirect("/showcart");
