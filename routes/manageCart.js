@@ -30,7 +30,21 @@ const addToCart = async (id, name, price, pool, session) => {
         return;
     }
 
-    //TODO: either update DB here, or make another method that updates DB with current product list and call that new method here
+    // Add item to cart in database
+    let pool = await sql.connect(dbConfig);
+
+    let addDB = `INSERT INTO incart (userId, productId, quantity, price, name)
+                VALUES (@userId, @productId, @quantity, @price, @name)`;
+    let preppedSql = new sql.PreparedStatement(pool);
+    preppedSql.input('userId', sql.VarChar(20));
+    preppedSql.input('productId', sql.Int);
+    preppedSql.input('quantity', sql.Int);
+    preppedSql.input('price', sql.Decimal(10, 2));
+    preppedSql.input('name', sql.VarChar(200));
+    await preppedSql.prepare(addDB);
+
+    await preppedSql.execute({ userId: session.userid, productId: id, quantity: 1, price: price, name: name });
+    pool.close();
 };
 
 const removeFromCart = async (id, pool, session) => {
@@ -47,7 +61,17 @@ const removeFromCart = async (id, pool, session) => {
         return;
     }
 
-    //TODO: either update DB here, or make another method that deletes the product from inCart and call that new method here
+    // Delete item from cart in database
+    let pool = await sql.connect(dbConfig);
+
+    let removeDB = `DELETE FROM incart WHERE userId = @userId AND productId = @productId`;
+    let preppedSql = new sql.PreparedStatement(pool);
+    preppedSql.input('userId', sql.VarChar(20));
+    preppedSql.input('productId', sql.Int);
+    await preppedSql.prepare(removeDB);
+
+    await preppedSql.execute({ userId: session.userid, productId: id });
+    pool.close();
 };
 
 const updateQtyInCart = async (id, newQty, pool, session) => {
@@ -77,7 +101,18 @@ const updateQtyInCart = async (id, newQty, pool, session) => {
         return;
     }
 
-    //TODO: either update DB here, or make another method that updates the product quantity from inCart and call that new method here
+    // Update item in cart in database
+    let pool = await sql.connect(dbConfig);
+
+    let updateDB = `UPDATE incart SET quantity = @quantity WHERE userId = @userId AND productId = @productId`;
+    let preppedSql = new sql.PreparedStatement(pool);
+    preppedSql.input('quantity', sql.Int);
+    preppedSql.input('userId', sql.VarChar(20));
+    preppedSql.input('productId', sql.Int);
+    await preppedSql.prepare(updateDB);
+
+    await preppedSql.execute({ quantity: newQty, userId: session.userid, productId: id });
+    pool.close();
     return;
 };
 
@@ -97,7 +132,7 @@ const getDBCart = async (pool, session) => {
     const preppedSql = new sql.PreparedStatement(pool);
     preppedSql.input("username", sql.VarChar);
     await preppedSql.prepare(cartQuery);
-    let results = await preppedSql.execute({username: username});
+    let results = await preppedSql.execute({ username: username });
     let dbCart = results.recordset;
 
     if (dbCart.length === 0) { // If there are no values returned from cart
@@ -118,31 +153,32 @@ const getDBCart = async (pool, session) => {
         };
     }
     return dbProducts;
-};
+}
 
 //Load cart from DB on login
 const loadCartFromDB = async (pool, session) => {
-        if (!session.authenticatedUser) {
-            return;
-        }
-
-        let dbCart = await getDBCart(pool, session);
-        if (!dbCart) {
-            //Save any residual cart before login into DB
-            if (session.productList) {
-                for (let product of session.productList) {
-                    if (!product) {
-                        continue;
-                    }
-                    //TODO: Add each item into the DB using the DB add method
-                }
-            }
-        } else {
-            //if there is a cart stored in DB overwrite the current cart before login and just use DB cart
-            session.productList = dbCart;
-        }
+    if (!session.authenticatedUser) {
+        return;
     }
-;
+
+    let dbCart = await getDBCart(pool, session);
+    if (!dbCart) {
+        //Save any residual cart before login into DB
+        if (session.productList) {
+            for (let product of session.productList) {
+                if (!product) {
+                    continue;
+                }
+                // Add each item into the DB using the DB add method
+                addToCart = async (product.id, product.name, product.price, pool, session)
+            }
+        }
+    } else {
+        //if there is a cart stored in DB overwrite the current cart before login and just use DB cart
+        session.productList = dbCart;
+    }
+}
+    ;
 
 // After checkout, delete the cart since the order has been placed
 const eraseCart = async (pool, session) => {
@@ -159,7 +195,7 @@ const eraseCart = async (pool, session) => {
     const preppedSql = new sql.PreparedStatement(pool);
     preppedSql.input("userid", sql.VarChar);
     await preppedSql.prepare(eraseCartSql);
-    await preppedSql.execute({userid: session.authenticatedUser});
+    await preppedSql.execute({ userid: session.authenticatedUser });
 };
 
 module.exports = {
