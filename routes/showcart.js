@@ -21,7 +21,7 @@ const makeUpdateCartURLSub = (id, quantity) => {
 };
 
 const makeRemoveCartURL = (id) => {
-    return `updateCart?id=${id}`
+    return `removeCart?id=${id}`
 };
 
 // Request and rendering.

@@ -70,7 +70,7 @@ const removeFromCart = async (id, pool, session) => {
     preppedSql.input('productId', sql.Int);
     await preppedSql.prepare(removeDB);
 
-    await preppedSql.execute({userId: session.userid, productId: id});
+    await preppedSql.execute({userId: session.authenticatedUser, productId: id});
 };
 
 const updateQtyInCart = async (id, newQty, pool, session) => {
@@ -112,7 +112,7 @@ const updateQtyInCart = async (id, newQty, pool, session) => {
     preppedSql.input('productId', sql.Int);
     await preppedSql.prepare(updateDB);
 
-    await preppedSql.execute({quantity: newQty, userId: session.userid, productId: id});
+    await preppedSql.execute({quantity: newQty, userId: session.authenticatedUser, productId: id});
 };
 
 //Fetches the cart from the database
