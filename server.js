@@ -21,6 +21,12 @@ let product = require('./routes/product');
 let displayImage = require('./routes/displayImage');
 let customer = require('./routes/customer');
 let ship = require('./routes/ship');
+let createAcc = require('./routes/createAcc');
+let newAccFormValidation = require('./routes/newAccFormValidation');
+let userAcc = require('./routes/userAcc');
+let editInfo = require('./routes/editInfo');
+let updateUserInfo = require('./routes/updateUserInfo');
+let listCustOrders = require('./routes/listCustOrders');
 
 const app = express();
 
@@ -78,6 +84,12 @@ app.use('/product', product);
 app.use('/displayImage', displayImage);
 app.use('/customer', customer);
 app.use('/ship', ship);
+app.use('/createAcc', createAcc);
+app.use('/newAccFormValidation', newAccFormValidation);
+app.use('/userAcc', userAcc);
+app.use('/editInfo', editInfo);
+app.use('/updateUserInfo', updateUserInfo);
+app.use('/listCustOrders', listCustOrders);
 
 // Starting our Express app
 app.listen(process.env.PORT || 3000)
