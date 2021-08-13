@@ -24,6 +24,7 @@ let newAccFormValidation = require('./routes/newAccFormValidation');
 let userAcc = require('./routes/userAcc');
 let editInfo = require('./routes/editInfo');
 let updateUserInfo = require('./routes/updateUserInfo');
+let listCustOrders = require('./routes/listCustOrders');
 
 const app = express();
 
@@ -84,6 +85,7 @@ app.use('/newAccFormValidation', newAccFormValidation);
 app.use('/userAcc', userAcc);
 app.use('/editInfo', editInfo);
 app.use('/updateUserInfo', updateUserInfo);
+app.use('/listCustOrders', listCustOrders);
 
 // Starting our Express app
 app.listen(process.env.PORT || 3000)
