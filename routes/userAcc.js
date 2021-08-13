@@ -13,7 +13,9 @@ router.get('/', function (req, res, next) {
 
     res.render('userAcc', {
         title: "User Account",
-        user: user
+        username: req.session.authenticatedUser,
+        user: user,
+
     });
 });
 

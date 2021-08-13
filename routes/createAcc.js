@@ -11,6 +11,7 @@ router.get('/', function(req, res, next) {
 
     res.render('newAccForm', {
         title: "Create an Account",
+        username: req.session.authenticatedUser,
         createAccMessage: createAccMessage
     });
 });
