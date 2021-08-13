@@ -11,10 +11,10 @@ router.post('/', function (req, res) {
         pool = await sql.connect(dbConfig);
         let update = await updateAcc(req, pool);
         if (update) {
-            req.session.createAccMessage = "Account info updated";
+            req.session.updateAccMessage = "Account info updated";
             res.redirect("/userAcc");
         } else {
-            req.session.createAccMessage = "Nothing to update";
+            req.session.updateAccMessage = "Nothing to update";
             res.redirect("/userAcc");
         }
     })().then(() => pool.close());

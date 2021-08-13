@@ -4,18 +4,11 @@ const auth = require('../auth');
 const sql = require('mssql');
 
 router.get('/', function (req, res, next) {
-    res.setHeader('Content-Type', 'text/html');
-
-    let user = null;
-    if (req.session.authenticatedUser){
-        user = req.session.authenticatedUser;
-    }
 
     res.render('userAcc', {
         title: "User Account",
         username: req.session.authenticatedUser,
-        user: user,
-
+        updateAccMessage: req.session.updateAccMessage
     });
 });
 
