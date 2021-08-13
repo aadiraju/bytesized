@@ -1,0 +1,107 @@
+<div class="text-7xl font-black text-center">Create Account;</div>
+<div class="text-black font-light text-md pt-3 text-center">Create Your Account:
+    {{#if createAccMessage}}
+        <p class="text-red-600 font-semibold">{{createAccMessage}}</p>
+    {{/if}}
+</div>
+<div class="flex items-center justify-center px-4 py-3">
+    <div class="w-1/2 mx-auto shadow-lg rounded-md p-4 bg-white">
+        <form method="post" action="newAccFormValidation" class="flex flex-col items-center">
+            <div class="relative flex-1">
+                <label for="firstName"
+                       class=" left-2 px-1 -top-2.5 bg-white text-black text-sm transition-all">
+                    First Name:
+                </label>
+                <input id="firstName" name="first" type="text"
+                       class=" h-12 border border-1.5 rounded-md border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-black focus:border-2 transition ease-in duration-100 p-3"
+                       placeholder="Eg: 123, 456, etc.">
+            </div>
+            <div class="relative flex-1 flex-row">
+                <label for="lastName"
+                       class="left-2 px-1 -top-2.5 bg-white text-black text-sm transition-all">
+                    Last Name:
+                </label>
+                <input id="lastName" name="last" type="text"
+                       class="h-12 border border-1.5 rounded-md border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-black focus:border-2 transition ease-in duration-100 p-3 mt-3 ml-2">
+            </div>
+            <div class="relative flex-1 flex-row">
+                <label for="email"
+                       class="left-2 px-1 -top-2.5 bg-white text-black text-sm transition-all">
+                    Email:
+                </label>
+                <input id="email" name="em" type="email"
+                       class="h-12 border border-1.5 rounded-md border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-black focus:border-2 transition ease-in duration-100 p-3 mt-3 ml-10">
+            </div>
+            <div class="relative flex-1 flex-row">
+                <label for="phoneNum"
+                       class="left-2 px-1 -top-2.5 bg-white text-black text-sm transition-all">
+                    Phone Num:
+                </label>
+                <input id="phoneNum" name="phone" type="tel"
+                       class="h-12 border border-1.5 rounded-md border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-black focus:border-2 transition ease-in duration-100 p-3 mt-3 ml-2">
+            </div>
+            <div class="relative flex-1 flex-row">
+                <label for="address"
+                       class="left-2 px-1 -top-2.5 bg-white text-black text-sm transition-all">
+                    Address:
+                </label>
+                <input id="address" name="add" type="text"
+                       class="h-12 border border-1.5 rounded-md border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-black focus:border-2 transition ease-in duration-100 p-3 mt-3 ml-5">
+            </div>
+            <div class="relative flex-1 flex-row">
+                <label for="city"
+                       class="left-2 px-1 -top-2.5 bg-white text-black text-sm transition-all">
+                    City:
+                </label>
+                <input id="city" name="cty" type="text"
+                       class="h-12 border border-1.5 rounded-md border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-black focus:border-2 transition ease-in duration-100 p-3 mt-3 ml-10">
+            </div>
+            <div class="relative flex-1 flex-row">
+                <label for="state"
+                       class="left-2 px-1 mr-6 -top-2.5 bg-white text-black text-sm transition-all">
+                    State:
+                </label>
+                <input id="state" name="st" type="text"
+                       class="h-12 border border-1.5 rounded-md border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-black focus:border-2 transition ease-in duration-100 p-3 mt-3 ml-2">
+            </div>
+            <div class="relative flex-1 flex-row">
+                <label for="postalcode"
+                       class="left-2 px-1 -top-2.5 bg-white text-black text-xs transition-all">
+                    Postal Code:
+                </label>
+                <input id="postalcode" name="postal" type="text"
+                       class="h-12 border border-1.5 rounded-md border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-black focus:border-2 transition ease-in duration-100 p-3 mt-3">
+            </div>
+            <div class="relative flex-1 flex-row">
+                <label for="country"
+                       class="left-2 px-1 -top-2.5 bg-white text-black text-sm transition-all">
+                    Country:
+                </label>
+                <input id="country" name="ctry" type="text"
+                       class="h-12 border border-1.5 rounded-md border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-black focus:border-2 transition ease-in duration-100 p-3 mt-3 ml-4">
+            </div>
+            <div class="relative flex-1 flex-row">
+                <label for="username"
+                       class="left-2 px-1 -top-2.5 bg-white text-black text-sm transition-all">
+                    Username:
+                </label>
+                <input id="username" name="user" type="text"
+                       class="h-12 border border-1.5 rounded-md border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-black focus:border-2 transition ease-in duration-100 p-3 mt-3 ml-2">
+            </div>
+            <div class="relative flex-1 flex-row">
+                <label for="password"
+                       class="left-2 px-1 -top-2.5 bg-white text-black text-sm transition-all">
+                    Password:
+                </label>
+                <input id="password" name="pass" type="password"
+                       class="h-12 border border-1.5 rounded-md border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-black focus:border-2 transition ease-in duration-100 p-3 mt-3 ml-2">
+            </div>
+            <div class="flex gap-2 flex-row-center content-evenly">
+                <div class="relative flex-1 pt-7">
+                    <button type="submit" class="bg-black text-white font-extrabold text-md px-4 py-2">Create Account
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

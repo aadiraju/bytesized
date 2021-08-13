@@ -4,7 +4,7 @@ const sql = require('mssql');
 
 // handlebars helper functions
 const priceFormat = (price) => {
-    return '$' + Number(price).toFixed(2);
+    return 'CAD $' + Number(price).toFixed(2);
 };
 
 const dateTimeFormat = (datetime) => {
