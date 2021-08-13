@@ -79,9 +79,9 @@ router.get('/', checkAuth, function (req, res, next) {
             let ordersummaryInsert = `INSERT INTO ordersummary (orderDate, totalAmount, shiptoAddress, shiptoCity,
                                                                 shiptoState, shiptoPostalCode, shiptoCountry,
                                                                 customerId)
-                                      OUTPUT INSERTED.orderId
                                       VALUES (@orderDate, @totalAmount, @address, @city, @state, @postalCode, @country,
-                                              @customerId);`;
+                                              @customerId);
+            SELECT SCOPE_IDENTITY() AS orderId`;
 
             preppedSql = new sql.PreparedStatement(pool);
             preppedSql.input('orderDate', sql.DateTime);
@@ -102,7 +102,7 @@ router.get('/', checkAuth, function (req, res, next) {
                 state: customerResults.recordset[0].state,
                 postalCode: customerResults.recordset[0].postalCode,
                 country: customerResults.recordset[0].country,
-                customerId: customerResults.recordset[0].customerId
+                customerId: customerId
             });
 
             orderId = orderResults.recordset[0].orderId;
