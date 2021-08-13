@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const sql = require('mssql');
+const manageCart = require('./manageCart');
 
 const priceFormat = (price) => {
     return 'CAD$ ' + Number(price).toFixed(2);
@@ -78,9 +79,9 @@ router.get('/', checkAuth, function (req, res, next) {
             let ordersummaryInsert = `INSERT INTO ordersummary (orderDate, totalAmount, shiptoAddress, shiptoCity,
                                                                 shiptoState, shiptoPostalCode, shiptoCountry,
                                                                 customerId)
-                                      OUTPUT INSERTED.orderId
                                       VALUES (@orderDate, @totalAmount, @address, @city, @state, @postalCode, @country,
-                                              @customerId);`;
+                                              @customerId);
+            SELECT SCOPE_IDENTITY() AS orderId`;
 
             preppedSql = new sql.PreparedStatement(pool);
             preppedSql.input('orderDate', sql.DateTime);
@@ -101,7 +102,7 @@ router.get('/', checkAuth, function (req, res, next) {
                 state: customerResults.recordset[0].state,
                 postalCode: customerResults.recordset[0].postalCode,
                 country: customerResults.recordset[0].country,
-                customerId: customerResults.recordset[0].customerId
+                customerId: customerId
             });
 
             orderId = orderResults.recordset[0].orderId;
@@ -128,8 +129,8 @@ router.get('/', checkAuth, function (req, res, next) {
                 });
             }
         }
-        //clear session cart
-        req.session.productList = [];
+        //clear session cart and cart from DB
+        await manageCart.eraseCart(pool, req.session);
 
         pool.close();
         return [cartSize, realProductList, orderId, totalAmount, customerResults.recordset[0]];
