@@ -7,6 +7,8 @@ let loadData = require('./routes/loaddata');
 let listOrder = require('./routes/listorder');
 let listProd = require('./routes/listprod');
 let addCart = require('./routes/addcart');
+let updateCart = require('./routes/updateCart');
+let removeCart = require('./routes/removeCart');
 let showCart = require('./routes/showcart');
 let checkout = require('./routes/checkout');
 let order = require('./routes/order');
@@ -19,6 +21,12 @@ let product = require('./routes/product');
 let displayImage = require('./routes/displayImage');
 let customer = require('./routes/customer');
 let ship = require('./routes/ship');
+let createAcc = require('./routes/createAcc');
+let newAccFormValidation = require('./routes/newAccFormValidation');
+let userAcc = require('./routes/userAcc');
+let editInfo = require('./routes/editInfo');
+let updateUserInfo = require('./routes/updateUserInfo');
+let listCustOrders = require('./routes/listCustOrders');
 
 const app = express();
 
@@ -62,6 +70,8 @@ app.use('/loaddata', loadData);
 app.use('/listorder', listOrder);
 app.use('/listprod', listProd);
 app.use('/addcart', addCart);
+app.use('/updateCart', updateCart);
+app.use('/removeCart', removeCart);
 app.use('/showcart', showCart);
 app.use('/checkout', checkout);
 app.use('/customerAuth', customerAuth);
@@ -74,6 +84,12 @@ app.use('/product', product);
 app.use('/displayImage', displayImage);
 app.use('/customer', customer);
 app.use('/ship', ship);
+app.use('/createAcc', createAcc);
+app.use('/newAccFormValidation', newAccFormValidation);
+app.use('/userAcc', userAcc);
+app.use('/editInfo', editInfo);
+app.use('/updateUserInfo', updateUserInfo);
+app.use('/listCustOrders', listCustOrders);
 
 // Starting our Express app
 app.listen(process.env.PORT || 3000)
