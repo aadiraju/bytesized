@@ -10,4 +10,4 @@ RUN npm install
 # Copy local code to the container image.
 COPY . ./
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "startDev"]
