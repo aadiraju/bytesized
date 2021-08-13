@@ -129,7 +129,7 @@ router.get('/', checkAuth, function (req, res, next) {
                 });
             }
         }
-        //clear session cart and from DB
+        //clear session cart and cart from DB
         await manageCart.eraseCart(pool, req.session);
 
         pool.close();

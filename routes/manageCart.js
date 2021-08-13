@@ -41,7 +41,7 @@ const addToCart = async (id, name, price, pool, session) => {
     preppedSql.input('name', sql.VarChar(200));
     await preppedSql.prepare(addDB);
 
-    await preppedSql.execute({userId: session.userid, productId: id, quantity: 1, price: price, name: name});
+    await preppedSql.execute({userId: session.authenticatedUser, productId: id, quantity: 1, price: price, name: name});
 
 };
 
@@ -182,7 +182,7 @@ const loadCartFromDB = async (pool, session) => {
 // After checkout, delete the cart since the order has been placed
 const eraseCart = async (pool, session) => {
     session.productList = [];
-    if (session.authenticatedUser) {
+    if (!session.authenticatedUser) {
         return;
     }
     // erase cart from DB if user is logged in
