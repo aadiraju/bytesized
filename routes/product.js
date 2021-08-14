@@ -28,6 +28,19 @@ router.get('/', function (req, res, next) {
                                        JOIN category c on p.categoryId = c.categoryId
                               WHERE productId = @productId`;
 
+        let reviewSql = `select reviewId,
+                                reviewRating,
+                                reviewDate,
+                                review.customerId,
+                                productId,
+                                reviewComment,
+                                c.firstName,
+                                c.lastName
+                         from review
+                                  join customer c on c.customerId = review.customerId
+                         where productId = @pid;
+        `;
+
         let preppedSql = new sql.PreparedStatement(pool);
         preppedSql.input('productId', sql.Int);
         await preppedSql.prepare(getProductById);
@@ -35,14 +48,23 @@ router.get('/', function (req, res, next) {
         let results = await preppedSql.execute({productId: productId});
         let product = results.recordset[0];
 
+        let reviewPs = new sql.PreparedStatement(pool);
+        reviewPs.input('pid', sql.Int);
+        await reviewPs.prepare(reviewSql);
+
+        let reviewResults = await reviewPs.execute({pid: productId});
+
+        let reviews = (reviewResults.recordset.length > 0) ? reviewResults.recordset : null;
+
         pool.close();
-        return [productId, product];
-    })().then(([productId, product]) => {
+        return [productId, product, reviews];
+    })().then(([productId, product, reviews]) => {
         res.render('product', {
             title: 'Bytesized Product',
             username: req.session.authenticatedUser,
             productId: productId,
             product: product,
+            reviews: reviews,
             helpers: {
                 priceFormat,
                 makeAddCartURL,
