@@ -51,3 +51,81 @@
         </div>
     </div>
 </div>
+<p class="text-3xl text-center font-black m-3">Reviews;</p>
+{{#if reviews}}
+    <div class="flex items-center justify-center">
+        <div class="col-span-12">
+            <table class="shadow-lg bg-white">
+                <thead>
+                <tr>
+                    <th class="bg-black border text-left text-white px-8 py-4">Reviewer</th>
+                    <th class="bg-black border text-left text-white px-8 py-4">Rating</th>
+                    <th class="bg-black border text-left text-white px-10 py-4">Comment</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each reviews}}
+                    <tr>
+                        <td class="border text-left px-8 py-4">{{this.firstName}} {{this.lastName}}</td>
+                        <td class="border text-left px-8 py-4">{{this.reviewRating}}/5</td>
+                        <td class="border text-left px-8 py-4">{{this.reviewComment}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{{else}}
+    <p class="text-xl text-center font-black m-3">No Reviews yet! Maybe you could add one!</p>
+{{/if}}
+{{#if username}}
+    <div class="flex items-center justify-end mt-8">
+        <form method="post" action="review" class="flex flex-col items-center">
+            <div class="relative flex-1">
+                <p class="text-md font-bold">Tried this product? Add your review!</p>
+                <input type="hidden" name="productId" value={{product.productId}}>
+                <label class="block mb-2">Rating:</label>
+                <div class="flex">
+                    <div class="flex items-center mb-2 mr-4">
+                        <input type="radio" id="radio1" name="reviewRating" value=1
+                               class="h-4 w-4 text-gray-700 px-3 py-3 border rounded mr-2">
+                        <label for="radio1" class="text-gray-600">1</label>
+                    </div>
+                    <div class="flex items-center mb-2 mx-4">
+                        <input type="radio" id="radio2" name="reviewRating" value=2
+                               class="h-4 w-4 text-gray-700 px-3 py-3 border rounded mr-2">
+                        <label for="radio2" class="text-gray-600">2</label>
+                    </div>
+                    <div class="flex items-center mb-2 mx-4">
+                        <input type="radio" id="radio3" name="reviewRating" value=3
+                               class="h-4 w-4 text-gray-700 px-3 py-3 border rounded mr-2">
+                        <label for="radio3" class="text-gray-600">3</label>
+                    </div>
+                    <div class="flex items-center mb-2 mx-4">
+                        <input type="radio" id="radio4" name="reviewRating" value=4
+                               class="h-4 w-4 text-gray-700 px-3 py-3 border rounded mr-2">
+                        <label for="radio4" class="text-gray-600">4</label>
+                    </div>
+                    <div class="flex items-center mb-2 mx-4">
+                        <input type="radio" id="radio5" name="reviewRating" value=5
+                               class="h-4 w-4 text-gray-700 px-3 py-3 border rounded mr-2">
+                        <label for="radio5" class="text-gray-600">5</label>
+                    </div>
+                </div>
+                <label for="comment"
+                       class=" left-2 px-1 -top-2.5 bg-white text-black text-md transition-all">
+                    Comment:
+                </label>
+                <textarea id="comment" name="reviewComment" rows="4"
+                          class="w-full mt-3 border border-1.5 rounded-md border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-black focus:border-2 transition ease-in duration-100 p-3"></textarea>
+                <button type="submit"
+                        class="outline-black text-black font-extrabold rounded-lg text-md px-4 py-1 ml-1 mt-2">
+                    Submit Review
+                </button>
+            </div>
+        </form>
+    </div>
+{{else}}
+    <p class="text-xl text-center font-black m-3 text-red-500">Please login to add a review!</p>
+{{/if}}
+
